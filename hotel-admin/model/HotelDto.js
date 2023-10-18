@@ -8,7 +8,8 @@ export class HotelDTO {
         isHotelPetsAllowed,
         hotelCancellationCost,
         isHotelCancellationCriteriaFree,
-        hotelPackageDTOS
+        hotelPackageDTOS,
+        hotelRemarks
     ) {
         this.hotelId = null;
         this.hotelName = hotelName;
@@ -19,8 +20,8 @@ export class HotelDTO {
         this.isHotelPetsAllowed = isHotelPetsAllowed;
         this.isHotelCancellationCriteriaFree = isHotelCancellationCriteriaFree;
         this.hotelCancellationCost = hotelCancellationCost;
-        this.hotelRemarks = '';
-        this.hotelImagesStrings = [];
+        this.hotelRemarks = hotelRemarks;
+        this.hotelImageDTOS = [];
         this.hotelPackageDTOS = hotelPackageDTOS;
     }
 }

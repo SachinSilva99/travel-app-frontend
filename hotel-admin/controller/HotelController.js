@@ -10,7 +10,10 @@ export class HotelController {
         this.hotels = [];
         $(document).ready(this.handleHotelPackage.bind(this));
         $('#addBtn').click(this.createHotel.bind(this));
+        $('#clearFieldBtn').click(this.clearFields.bind(this));
         this.hotelNameElement = $('#hotelName');
+        this.hotelIdElement = $('#hotelId');
+        this.hotelRemarksElement = $('#hotelRemarks');
         this.hotelCategoryElement = $('#hotelCategory');
         this.hotelLocationElement = $('#hotelLocation');
         this.hotelEmailElement = $('#hotelEmail');
@@ -19,6 +22,7 @@ export class HotelController {
         this.hotelIsCancelledElement = $('#isHotelCancellationCriteriaFree');
         this.hotelImageInputsElement = $('#imageInput');
         this.hotelContactElement = $('#hotelContact');
+        $('#hotelsContainer').on('click', '.card', this.clickOnCard.bind(this));
     }
 
     handleHotelPackage() {
@@ -88,6 +92,7 @@ export class HotelController {
         const isPetsAllowed = this.hotelPetsAllowedElement.val();
         const hotelContact = this.hotelContactElement.val();
         const isCriteriaFree = this.hotelIsCancelledElement.val();
+        const hotelRemarks = this.hotelRemarksElement.val();
         let hotelCancellationCost = 0;
         if (isCriteriaFree !== null) {
             hotelCancellationCost = this.hotelCancellationCostElement.val();
@@ -107,8 +112,18 @@ export class HotelController {
         });
 
 
-        const hotelDto = new HotelDTO(hotelName,
-            hotelCategory, location, email, hotelContact, isPetsAllowed, hotelCancellationCost, isCriteriaFree, packages);
+        const hotelDto = new HotelDTO(
+            hotelName,
+            hotelCategory,
+            location,
+            email,
+            hotelContact,
+            isPetsAllowed,
+            hotelCancellationCost,
+            isCriteriaFree,
+            packages,
+            hotelRemarks
+        );
         const formData = new FormData();
         const jsonDTO = JSON.stringify(hotelDto);
         const blob = new Blob([jsonDTO], {type: 'application/json'});
@@ -117,7 +132,8 @@ export class HotelController {
         for (let i = 0; i < this.hotelImageInputsElement[0].files.length; i++) {
             formData.append("hotelImagesRequest", this.hotelImageInputsElement[0].files[i]);
         }
-        $.ajax({
+        console.log(hotelDto)
+      /*  $.ajax({
             type: "POST",
             url: "http://localhost:8092/hotelservice/api/v1/hotels",
             data: formData,
@@ -129,7 +145,7 @@ export class HotelController {
             error: (error) => {
                 console.error("Error saving guide: " + error.responseText);
             }
-        });
+        });*/
     }
 
     getAllHotels() {
@@ -147,6 +163,69 @@ export class HotelController {
                 console.log("Error: " + errorThrown);
             }
         });
+    }
+
+    clickOnCard(e) {
+        const target = $(e.target);
+
+        const hotelId = e.currentTarget.id;
+        const hotel = this.hotels.find(value => value.hotelId === hotelId);
+        console.log(hotel)
+        if (target.is('#delete')) {
+            return;
+        }
+
+        this.hotelNameElement.val(hotel.hotelName);
+        this.hotelCategoryElement.val(hotel.hotelCategory);
+        this.hotelIdElement.val(hotel.hotelId);
+        this.hotelLocationElement.val(hotel.hotelLocation);
+        this.hotelEmailElement.val(hotel.hotelEmail);
+        this.hotelPetsAllowedElement.val(hotel.isHotelPetsAllowed.toString());
+        this.hotelContactElement.val(hotel.hotelContactNumber);
+        this.hotelIsCancelledElement.val(hotel.isHotelCancellationCriteriaFree.toString());
+        this.hotelCancellationCostElement.val(hotel.hotelCancellationCost);
+
+        const imageDisplay = $('#imageDisplay');
+        const hotelImageDTOS = hotel.hotelImageDTOS;
+        console.log(hotelImageDTOS)
+        imageDisplay.html('');
+        hotelImageDTOS.forEach(hotelImageDto => {
+            const imageContainer = $('<div>', {'class': 'col-lg-3 col-md-6 col-sm-12 m-3 bg-light border'}, {'id': hotelImageDto.hotelImageId});
+            const deleteButton = $(
+                '<button>', {
+                    'text': 'Delete This Image',
+                    'class': ' m-3 btn btn-danger delete-button',
+                });
+            const text = $(
+                '<h6>', {
+                    'text': hotelImageDto.hotelImageId,
+                    'class': '',
+                });
+            const image = $(
+                '<img>', {
+                    'src': `data:image/**;base64,${hotelImageDto.hotelImgValue}`,
+                    'class': 'uploaded-image m-3'
+                });
+            imageContainer.append(image)
+            imageContainer.append(text)
+            imageContainer.append(deleteButton)
+            imageDisplay.append(imageContainer);
+        });
+    }
+
+    clearFields() {
+        this.hotelImageInputsElement = $('#imageInput').val('');
+        $('#imageDisplay').html('');
+        this.hotelNameElement.val('');
+        this.hotelIdElement.val('');
+        this.hotelCategoryElement.val('');
+        this.hotelLocationElement.val('');
+        this.hotelEmailElement.val('');
+        this.hotelPetsAllowedElement.val('true');
+        this.hotelContactElement.val('');
+        this.hotelIsCancelledElement.val('true');
+        this.hotelRemarksElement.val('');
+        this.hotelCancellationCostElement.val(0);
     }
 
     loadData(data) {
