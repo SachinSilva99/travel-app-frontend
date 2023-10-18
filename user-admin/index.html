@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./bootstrap-5.3.2-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>User admin</title>
+</head>
+<body>
+<h1>User Admin</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control mt-1" id="username" placeholder="Enter username">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control mt-1" id="password" placeholder="Enter password">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" class="form-control mt-1" id="dob">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group mt-1">
+        <label class="label">Gender</label>
+        <div class="p-t-10">
+          <label
+                  class="radio-container m-r-45"
+          >Male
+            <input
+                    type="radio"
+                    checked="checked"
+                    name="gender"
+            />
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio-container"
+          >Female
+            <input
+                    type="radio"
+                    name="gender"
+            />
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" class="form-control mt-1" id="address" placeholder="Enter Address">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control mt-1" id="email" placeholder="Enter Email">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+      <div class="form-group">
+        <label for="admin">Admin Type</label>
+        <select class="form-select mt-1" id="admin">
+          <option value="USER_ADMIN">User Admin</option>
+          <option value="VEHICLE_ADMIN">Vehicle Admin</option>
+          <option value="GUIDE_ADMIN">Guide Admin</option>
+          <option value="HOTEL_ADMIN">Hotel Admin</option>
+          <option value="TRAVEL_ADMIN">Travel Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" class="form-control mt-1" id="phoneNumber" placeholder="Enter Phone Number">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group">
+        <label for="nicPassportNumber">Nic Or Passport Number
+        </label>
+        <input type="text" class="form-control mt-1" id="nicPassportNumber" placeholder="Enter Phone Number">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group">
+        <label for="nicPassportBack">Nic Or Passport Back
+        </label>
+        <input type="file" accept="image/*" class="form-control mt-1" id="nicPassportBack"
+               placeholder="Enter Phone Number">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+      <div class="form-group">
+        <label for="nicPassportFront">Nic Or Passport Front
+        </label>
+        <input type="file" accept="image/*" class="form-control mt-1" id="nicPassportFront"
+               placeholder="Enter Phone Number">
+      </div>
+    </div>
+
+    <button class="btn btn-primary col-2 m-4"> Add</button>
+    <!--  <div class="card col-4" >
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>-->
+  </div>
+</div>
+</body>
+</html>
