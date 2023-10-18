@@ -10,7 +10,10 @@ export class HotelController {
         this.hotels = [];
         $(document).ready(this.handleHotelPackage.bind(this));
         $('#addBtn').click(this.createHotel.bind(this));
+        $('#updateBtn').click(this.updateHotel.bind(this));
         $('#clearFieldBtn').click(this.clearFields.bind(this));
+        $('#deleteImageYes').click(this.deleteImage.bind(this));
+
         this.hotelNameElement = $('#hotelName');
         this.hotelIdElement = $('#hotelId');
         this.hotelRemarksElement = $('#hotelRemarks');
@@ -23,6 +26,31 @@ export class HotelController {
         this.hotelImageInputsElement = $('#imageInput');
         this.hotelContactElement = $('#hotelContact');
         $('#hotelsContainer').on('click', '.card', this.clickOnCard.bind(this));
+        $('#imageDisplay').on('click', '.card', this.getImageId.bind(this));
+        this.selectedImageId = null;
+        this.selectedHotel = null;
+    }
+
+    getImageId(e) {
+        this.selectedImageId = e.target.id;
+        console.log(e);
+    }
+
+    deleteImage() {
+        console.log(this.selectedImageId);
+        $.ajax({
+            url: this.hotelApi + '/images/' + this.selectedImageId,
+            type: "DELETE",
+            success: () => {
+                const imageContainerId = `imageContainer_${this.selectedImageId}`;
+                $(`#${imageContainerId}`).remove();
+                this.selectedImageId = null;
+                this.getAllHotels();
+            },
+            error: function () {
+                alert("Failed to delete guide");
+            }
+        });
     }
 
     handleHotelPackage() {
@@ -33,7 +61,6 @@ export class HotelController {
         addPackageButton.addEventListener("click", function () {
             const row = document.createElement("div");
             row.className = "row";
-
             row.innerHTML = `
               <div class="col-lg-2 col-md-6 col-sm-12">
                 <div class="form-group mt-1">
@@ -133,7 +160,7 @@ export class HotelController {
             formData.append("hotelImagesRequest", this.hotelImageInputsElement[0].files[i]);
         }
         console.log(hotelDto)
-      /*  $.ajax({
+        $.ajax({
             type: "POST",
             url: "http://localhost:8092/hotelservice/api/v1/hotels",
             data: formData,
@@ -145,7 +172,74 @@ export class HotelController {
             error: (error) => {
                 console.error("Error saving guide: " + error.responseText);
             }
-        });*/
+        });
+    }
+
+    updateHotel() {
+        const hotelName = this.hotelNameElement.val();
+        const hotelId = this.hotelIdElement.val();
+        const hotelCategory = this.hotelCategoryElement.val();
+        const location = this.hotelLocationElement.val();
+        const email = this.hotelEmailElement.val();
+        const isPetsAllowed = this.hotelPetsAllowedElement.val();
+        const hotelContact = this.hotelContactElement.val();
+        const isCriteriaFree = this.hotelIsCancelledElement.val();
+        const hotelRemarks = this.hotelRemarksElement.val();
+        let hotelCancellationCost = 0;
+        if (isCriteriaFree !== null) {
+            hotelCancellationCost = this.hotelCancellationCostElement.val();
+        }
+
+        const packageContainers = document.querySelectorAll('#packageContainer .row');
+        const packages = [];
+
+        packageContainers.forEach((container) => {
+            const packageId = container.querySelector('#hotelPackageId').value;
+            const packageType = container.querySelector('#hotelPackageType').value;
+            const roomType = container.querySelector('#hotelPackageRoomType').value;
+            const packagePrice = container.querySelector('#hotelPackagePrice').value;
+
+            const hotelPackage = new HotelPackageDTO(packageId, packageType, roomType, packagePrice);
+            packages.push(hotelPackage);
+        });
+
+
+        const hotelDto = new HotelDTO(
+            hotelName,
+            hotelCategory,
+            location,
+            email,
+            hotelContact,
+            isPetsAllowed,
+            hotelCancellationCost,
+            isCriteriaFree,
+            packages,
+            hotelRemarks
+        );
+        const formData = new FormData();
+        const jsonDTO = JSON.stringify(hotelDto);
+        const blob = new Blob([jsonDTO], {type: 'application/json'});
+
+        formData.append("hotelDTO", blob);
+        for (let i = 0; i < this.hotelImageInputsElement[0].files.length; i++) {
+            formData.append("hotelImagesRequest", this.hotelImageInputsElement[0].files[i]);
+        }
+        console.log(hotelDto)
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8092/hotelservice/api/v1/hotels" + "/" + hotelId,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: () => {
+                console.log("Guide updated successfully. User ID: ");
+                this.getAllHotels();
+                this.clearFields();
+            },
+            error: (error) => {
+                console.error("Error saving guide: " + error.responseText);
+            }
+        });
     }
 
     getAllHotels() {
@@ -157,7 +251,6 @@ export class HotelController {
                 const standardResponse = new StandardResponse(res.code, res.msg, res.data);
                 this.loadData(standardResponse.data);
                 this.hotels = standardResponse.data;
-                console.log(this.hotels)
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error: " + errorThrown);
@@ -170,7 +263,7 @@ export class HotelController {
 
         const hotelId = e.currentTarget.id;
         const hotel = this.hotels.find(value => value.hotelId === hotelId);
-        console.log(hotel)
+        this.selectedHotel = hotel;
         if (target.is('#delete')) {
             return;
         }
@@ -190,12 +283,18 @@ export class HotelController {
         console.log(hotelImageDTOS)
         imageDisplay.html('');
         hotelImageDTOS.forEach(hotelImageDto => {
-            const imageContainer = $('<div>', {'class': 'col-lg-3 col-md-6 col-sm-12 m-3 bg-light border'}, {'id': hotelImageDto.hotelImageId});
-            const deleteButton = $(
-                '<button>', {
-                    'text': 'Delete This Image',
-                    'class': ' m-3 btn btn-danger delete-button',
-                });
+            const imageContainer = $('<div>', { 'class': 'card col-lg-3 col-md-6 col-sm-12 m-3 bg-light border' });
+            const deleteButton = document.createElement('button');
+
+            const imageContainerId = `imageContainer_${hotelImageDto.hotelImageId}`;
+            imageContainer.attr('id', imageContainerId);
+
+            deleteButton.textContent = 'Delete This Image';
+            deleteButton.setAttribute('data-bs-toggle', 'modal');
+            deleteButton.setAttribute('data-bs-target', '#modal');
+            deleteButton.classList.add('m-3', 'btn', 'btn-danger', 'delete-button');
+            deleteButton.id = hotelImageDto.hotelImageId;
+
             const text = $(
                 '<h6>', {
                     'text': hotelImageDto.hotelImageId,
@@ -242,7 +341,7 @@ export class HotelController {
                     <h5 class="card-title">${hotelDto.hotelName}</h5>
                     <img class="card-img-top" src="data:image/**;base64,${hotelDto.hotelImagesStrings[0]}" alt="Card image cap">
                     <h5 class="contact mt-3">${hotelDto.hotelContactNumber}</h5>
-                    <button id="delete" class="btn btn-danger" data-bs-toggle = "modal" data-bs-target="#modal">Delete</button>
+                    <button id="delete" class="btn btn-danger" data-bs-toggle = "modal" data-bs-target="#modal">Delete Hotel</button>
                 </div>`;
             hotelsContainer.appendChild(hotelCard);
         });

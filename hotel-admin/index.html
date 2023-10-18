@@ -95,7 +95,7 @@
       </div>
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
         <div class="form-group">
-          <label for="hotelRemarks">Hotel Cancellation Cost</label>
+          <label for="hotelRemarks">Hotel Remarks</label>
           <input type="number" class="form-control mt-1" id="hotelRemarks">
         </div>
       </div>
@@ -104,7 +104,7 @@
   <div class="container mt-4 mb-4 bg-light">
     <h1>Hotel Packages</h1>
     <div id="packageContainer"></div>
-    <button class="btn btn-primary" id="addPackageButton">Add Package</button>
+    <button class="btn btn-primary small" id="addPackageButton">Add package</button>
   </div>
 
   <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
@@ -112,7 +112,7 @@
     <input class="form-control" type="file" id="imageInput" multiple>
   </div>
   <div class="container">
-    <div id="imageDisplay" class=" row"></div>
+    <div id="imageDisplay" class="row"></div>
   </div>
   <div class="row">
     <button id="addBtn" type="submit" class="btn btn-primary col-2 mt-4 m-2 "> Add</button>
@@ -133,7 +133,26 @@
 
   </div>
 </div>
+
+<!--  image delete modal delete----------------------------------------------->
+<div class="modal" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1>Caution!</h1>
+      </div>
+      <div class="modal-body">
+        <p>Do you want to delete image?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="deleteImageYes" data-bs-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script src="./lib/Jquery.js"></script>
+<script src="./lib/bootstrap-5.3.2-dist/js/bootstrap.min.js"></script>
 <script type="module" src="./model/HotelDto.js"></script>
 <script type="module" src="./model/HotelPackageDto.js"></script>
 <script type="module" src="main.js">
