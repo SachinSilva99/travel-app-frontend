@@ -54,62 +54,59 @@ export class HotelController {
     }
 
     handleHotelPackage() {
-        const packageContainer = document.getElementById("packageContainer");
-        const addPackageButton = document.getElementById("addPackageButton");
+        const packageContainer = $("#packageContainer");
+        const addPackageButton = $("#addPackageButton");
         let packageId = 1;
 
-        addPackageButton.addEventListener("click", function () {
-            const row = document.createElement("div");
-            row.className = "row";
-            row.innerHTML = `
-              <div class="col-lg-2 col-md-6 col-sm-12">
-                <div class="form-group mt-1">
-                  <div class="form-group">
-                    <label for="hotelPackageId">Package Id</label>
-                    <input type="number" class="form-control mt-1" id="hotelPackageId" placeholder="READ ONLY" value="${packageId}"
-                           readonly>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-6 col-sm-12">
-                <div class="form-group mt-1">
-                  <label for="hotelPackageType">Hotel Package Type</label>
-                  <select class="form-select m-1" id="hotelPackageType">
-                    <option selected value="FULL_BOARD">FULL_BOARD</option>
-                    <option value="HALF_BOARD">HALF_BOARD</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-6 col-sm-12">
-                <div class="form-group mt-1">
-                  <label for="hotelPackageRoomType">Hotel Room Type</label>
-                  <select class="form-select m-1" id="hotelPackageRoomType">
-                    <option selected value="AC_Luxury_Room_Double">AC Luxury Double Room</option>
-                    <option value="AC_Luxury_Room_TRIPLE">AC Luxury Triple Room</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-6 col-sm-12">
-                <div class="form-group mt-1">
-                  <div class="form-group">
-                    <label for="hotelPackagePrice">Package Price</label>
-                    <input type="number" class="form-control mt-1" id="hotelPackagePrice" placeholder="Enter Package Price"
-                           required>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-6 col-sm-12 mt-4">
-                <button class="col btn btn-danger delete-button">Delete</button>
-              </div>`;
-            const deleteButton = row.querySelector(".delete-button");
-            deleteButton.addEventListener("click", () => {
-                packageContainer.removeChild(row);
-            });
+        addPackageButton.on("click", function () {
+            const row = $("<div>").addClass("row").attr("id", "packageRow").html(`
+      <div class="col-lg-2 col-md-6 col-sm-12">
+        <div class="form-group mt-1">
+          <div class="form-group">
+            <label for="hotelPackageId">Package Id</label>
+            <input type="number" class="form-control mt-1" id="hotelPackageId" placeholder="READ ONLY" value="${packageId}" readonly>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6 col-sm-12">
+        <div class="form-group mt-1">
+          <label for="hotelPackageType">Hotel Package Type</label>
+          <select class="form-select m-1" id="hotelPackageType">
+            <option selected value="FULL_BOARD">FULL_BOARD</option>
+            <option value="HALF_BOARD">HALF_BOARD</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="form-group mt-1">
+          <label for="hotelPackageRoomType">Hotel Room Type</label>
+          <select class="form-select m-1" id="hotelPackageRoomType">
+            <option selected value="AC_Luxury_Room_Double">AC Luxury Double Room</option>
+            <option value="AC_Luxury_Room_TRIPLE">AC Luxury Triple Room</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="form-group mt-1">
+          <div class="form-group">
+            <label for="hotelPackagePrice">Package Price</label>
+            <input type="number" class="form-control mt-1" id="hotelPackagePrice" placeholder="Enter Package Price" required>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6 col-sm-12 mt-4">
+        <button class="col btn btn-danger delete-button">Delete</button>
+      </div>
+    `);
 
-            packageContainer.appendChild(row);
+            row.find(".delete-button").on("click", function () {
+                row.remove();
+            });
+            packageContainer.append(row);
             packageId++;
         });
     }
+
 
     createHotel() {
         const hotelName = this.hotelNameElement.val();
@@ -280,10 +277,9 @@ export class HotelController {
 
         const imageDisplay = $('#imageDisplay');
         const hotelImageDTOS = hotel.hotelImageDTOS;
-        console.log(hotelImageDTOS)
         imageDisplay.html('');
         hotelImageDTOS.forEach(hotelImageDto => {
-            const imageContainer = $('<div>', { 'class': 'card col-lg-3 col-md-6 col-sm-12 m-3 bg-light border' });
+            const imageContainer = $('<div>', {'class': 'card col-lg-3 col-md-6 col-sm-12 m-3 bg-light border'});
             const deleteButton = document.createElement('button');
 
             const imageContainerId = `imageContainer_${hotelImageDto.hotelImageId}`;
@@ -295,24 +291,46 @@ export class HotelController {
             deleteButton.classList.add('m-3', 'btn', 'btn-danger', 'delete-button');
             deleteButton.id = hotelImageDto.hotelImageId;
 
-            const text = $(
-                '<h6>', {
-                    'text': hotelImageDto.hotelImageId,
-                    'class': '',
-                });
             const image = $(
                 '<img>', {
                     'src': `data:image/**;base64,${hotelImageDto.hotelImgValue}`,
-                    'class': 'uploaded-image m-3'
+                    'class': 'uploaded-image m-1'
                 });
             imageContainer.append(image)
-            imageContainer.append(text)
             imageContainer.append(deleteButton)
             imageDisplay.append(imageContainer);
         });
+
+        const packageDisplay = $('#existingPackages');
+        packageDisplay.html('');
+        const hotelPackageDTOS = hotel.hotelPackageDTOS;
+        hotelPackageDTOS.forEach(packageDto => {
+            const cardContainer = $('<div>', {'class': 'col-lg-3 col-md-6 col-sm-12 mt-4'});
+            const card = $('<div>', {'class': 'card'});
+
+            const cardHeader = $('<div>', {'class': 'card-header', 'text': packageDto.hotelPackageType});
+            card.append(cardHeader);
+
+            const cardBody = $('<div>', {'class': 'card-body'});
+            const text = $('<h6>', {'class': 'card-title', 'text': `ID: ${packageDto.hotelPackageId}`});
+            const roomType = $('<p>', {'class': 'card-text', 'text': `Room Type: ${packageDto.hotelPackageRoomType}`});
+            const price = $('<p>', {'class': 'card-text', 'text': `Price: Rs. ${packageDto.hotelPackagePrice}`});
+
+            cardBody.append(text, roomType, price);
+
+            const deleteButton = $('<button>', {'class': 'btn btn-danger', 'text': 'Delete'});
+
+            cardBody.append(deleteButton);
+            card.append(cardBody);
+            cardContainer.append(card);
+            packageDisplay.append(cardContainer);
+        });
+
     }
 
     clearFields() {
+        $('#existingPackages').remove();
+        $('#packageRow').remove();
         this.hotelImageInputsElement = $('#imageInput').val('');
         $('#imageDisplay').html('');
         this.hotelNameElement.val('');
