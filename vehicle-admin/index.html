@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="lib/bootstrap-5.3.2-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Vehicle Admin</title>
+</head>
+<body>
+<div class="container">
+  <form>
+    <div class="row">
+      <h1 class="d-flex mt-5">Vehicle Admin</h1>
+      <div class="d-flex justify-content-end">
+        <div class="col-1 ">
+          <label>Logout</label>
+          <img src="./images/icons8-logout-50.png" alt="img">
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="form-group">
+          <label for="vehicleId">Vehicle Id </label>
+          <input type="text" class="form-control mt-1 custom-text-color" id="vehicleId" placeholder="Read Only" required
+                 readonly>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="form-group">
+          <label for="vehicleBrand">Vehicle Brand</label>
+          <input type="text" class="form-control mt-1" id="vehicleBrand" placeholder="Enter Vehicle Brand" required>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group mt-1">
+          <label for="vehicleCategory">Select Vehicle Category:</label>
+          <select class="field form-select" id="vehicleCategory">
+            <option value="">Select a category</option>
+            <option value="ECONOMY">ECONOMY</option>
+            <option value="MID_RANGE">MID_RANGE</option>
+            <option value="LUXURY">LUXURY</option>
+            <option value="SUPER_LUXURY">SUPER_LUXURY</option>
+          </select>
+          <div class="invalid-feedback">Select a Category</div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="form-group mt-1">
+          <label for="vehicleFuelType">Select Vehicle Fuel Type:</label>
+          <select class="field form-select" id="vehicleFuelType">
+            <option value="">Select a category</option>
+            <option value="DIESEL">One Star</option>
+            <option value="DIESEL">Two Star</option>
+          </select>
+          <div class="invalid-feedback">Select a Category</div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleFuelConsumption">Fuel Consumption</label>
+          <input type="number" class="form-control mt-1" id="vehicleFuelConsumption"
+                 placeholder="Enter Fuel Consumption" required>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="form-group mt-1">
+          <label for="vehicleType">Vehicle Hybrid</label>
+          <select class="field form-select" id="vehicleType">
+            <option value="NO">NO</option>
+            <option value="YES">YES</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleNoOfSeats">No of Vehicle Seats</label>
+          <input type="number" class="form-control mt-1" id="vehicleNoOfSeats" placeholder="Enter No of Vehicle Seats"
+                 required>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="form-group mt-1">
+          <label for="vehicleIsHybrid">Vehicle Type</label>
+          <select class="field form-select" id="vehicleIsHybrid">
+            <option value="">Select a vehicle type</option>
+            <option value="CAR">Car</option>
+            <option value="VAN">Van</option>
+            <option value="SUV">SUV</option>
+            <option value="BUS">Bus</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="form-group mt-1">
+          <label for="vehicleTransmission">Vehicle Transmission</label>
+          <select class="field form-select" id="vehicleTransmission">
+            <option value="">Select vehicle transmission</option>
+            <option value="AUTO">Auto</option>
+            <option value="MANUAL">Manual</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleRemarks">Vehicle Remarks</label>
+          <input type="text" class="form-control mt-1" id="vehicleRemarks" placeholder="Enter Vehicle Remarks" required>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleDriverName">Vehicle Driver Name</label>
+          <input type="text" class="form-control mt-1" id="vehicleDriverName" placeholder="Enter Vehicle Driver Name"
+                 required>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleMainImage">Vehicle Main Image</label>
+          <input type="file" accept="image/*" class="form-control mt-1" id="vehicleMainImage">
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleImgFront">Vehicle Image Front</label>
+          <input type="file" accept="image/*" class="form-control mt-1" id="vehicleImgFront">
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleImgBack">Vehicle Image Back</label>
+          <input type="file" accept="image/*" class="form-control mt-1" id="vehicleImgBack">
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleImgFrontInterior">Vehicle Image Front Interior</label>
+          <input type="file" accept="image/*" class="form-control mt-1" id="vehicleImgFrontInterior">
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleImgBackInterior">Vehicle Image Back Interior</label>
+          <input type="file" accept="image/*" class="form-control mt-1" id="vehicleImgBackInterior">
+        </div>
+      </div>
+      <div class="row">
+        <button id="addBtn" type="submit" class="btn btn-primary col-2 mt-4 m-2 "> Add</button>
+        <button id="updateBtn" type="submit" class="btn btn-success col-2 mt-4 m-2 "> Update</button>
+        <button id="clearFieldBtn" type="submit" class="btn btn-dark col-2 mt-4 m-2 "> Clear Fields</button>
+      </div>
+      <!--      //showing vehicle images------------------------------->
+      <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleMainPicSection">
+          <div>
+            <h4 class="mt-3">Vehicle Main Image</h4>
+            <img id="vehicleMainPic" class="col-12 imgSize" src="" alt="img">
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleFrontPicSection">
+          <div>
+            <h4 class="mt-3">Vehicle Image Front</h4>
+            <img id="vehicleFrontPic" class="col-12 imgSize" src="" alt="img">
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleBackPicSection">
+          <div>
+            <h4 class="mt-3">Vehicle Image Back</h4>
+            <img id="vehicleBackPic" class="col-12 imgSize" src="" alt="img">
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleBackInteriorPicSection">
+          <div>
+            <h4 class="mt-3">Vehicle Image Back</h4>
+            <img id="vehicleBackInteriorPic" class="col-12 imgSize" src="" alt="img">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+  <div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+      <div class="form-group">
+        <label for="searchGuide">Search Vehicle</label>
+        <input type="text" class="form-control mt-1" id="searchGuide" placeholder="Search here" required>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row" id="guidesContainer"></div>
+  </div>
+
+  <!--  modal delete----------------------------------------------->
+  <div class="modal" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1>Caution!</h1>
+        </div>
+        <div class="modal-body">
+          <p>Do you want to delete?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="deleteYes" data-bs-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="./lib/bootstrap-5.3.2-dist/js/bootstrap.min.js"></script>
+
+<script src="./lib/Jquery.js"></script>
+<script type="module" src="main.js">
+</script>
+
+</body>
+</html>
