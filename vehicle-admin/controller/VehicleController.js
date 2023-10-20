@@ -7,7 +7,6 @@ export class VehicleController {
         this.getAllVehicles();
         this.vehicles = [];
         $('#addBtn').click(this.createVehicle.bind(this));
-        $('#deleteYes').click(this.deleteVehicle.bind(this));
         $('#updateBtn').click(this.updateVehicle.bind(this));
         this.vehicleIdEl = $('#vehicleId');
         this.vehicleNameEl = $('#vehicleName');
@@ -25,6 +24,11 @@ export class VehicleController {
         this.vehicleMainImageEl = $('#vehicleMainImage');
         this.vehicleImgFrontEl = $('#vehicleImgFront');
         this.vehicleImgBackEl = $('#vehicleImgBack');
+        this.vehicleMainPicEl = $('#vehicleMainPic');
+        this.vehicleFrontPicEl = $('#vehicleFrontPic');
+        this.vehicleBackPicEl = $('#vehicleBackPic');
+        this.vehicleBackInteriorPicEl = $('#vehicleBackInteriorPic');
+        this.vehicleFrontInteriorPicEl = $('#vehicleFrontInteriorPic');
         this.vehicleImgFrontInteriorEl = $('#vehicleImgFrontInterior');
         this.vehicleImgBackInteriorEl = $('#vehicleImgBackInterior');
         this.vehicleMainPicSectionEl = $('#vehicleMainPicSection');
@@ -32,33 +36,35 @@ export class VehicleController {
         this.vehicleBackPicSectionEl = $('#vehicleBackPicSection');
         this.vehicleBackInteriorPicSectionEl = $('#vehicleBackInteriorPicSection');
         this.vehicleFrontInteriorPicSectionEl = $('#vehicleFrontInteriorPicSection');
+        this.selectedVehicle = null;
         $('#clearFieldBtn').click(this.clearInputFields.bind(this));
-        this.getAllVehicles();
-        $('#guidesContainer').on('click', '.card', this.clickOnCard.bind(this));
-        $('#searchVehicle').on('keyup', this.searchGuides.bind(this));
+        $('#vehiclesContainer').on('click', '.card', this.clickOnCard.bind(this));
+        $('#searchVehicle').on('keyup', this.searchVehicles.bind(this));
     }
 
-    deleteVehicle() {
-        const guideId = this.selectedGuide.guideId;
-        $.ajax({
-            url: this.guideApiUrl + "/" + guideId,
+    deleteVehicle(vehicleId) {
+
+        console.log(vehicleId)
+       /* $.ajax({
+            url: this.vehicleApiUrl + '/' + this.selectedImageId,
             type: "DELETE",
             success: () => {
-                alert("Guide deleted successfully");
-                this.getAllVehicles();
+                const imageContainerId = `imageContainer_${this.selectedImageId}`;
+                $(`#${imageContainerId}`).remove();
+                this.selectedImageId = null;
+                this.getAllHotels();
             },
             error: function () {
                 alert("Failed to delete guide");
             }
-        });
+        });*/
     }
 
-    searchGuides() {
+    searchVehicles() {
         const searchResults = this.guides.filter(guide => {
             return guide.guideName.includes(this.searchFieldElement.val()) || guide.contact.includes(this.searchFieldElement.val());
         });
         this.loadData(searchResults);
-
     }
 
     createVehicle(e) {
@@ -80,7 +86,6 @@ export class VehicleController {
         const vehicleImgBack = this.vehicleImgBackEl[0].files[0];
         const vehicleImgFrontInterior = this.vehicleImgFrontInteriorEl[0].files[0];
         const vehicleImgBackInterior = this.vehicleImgBackInteriorEl[0].files[0];
-
 
         const dto = new VehicleDTO(vehicleBrand,
             vehicleName,
@@ -125,65 +130,81 @@ export class VehicleController {
         });
     }
 
-    updateVehicle(e) {/*
-        const guideId = this.guideIdElement.val();
-        if (guideId === null || guideId === undefined || guideId === "") {
-            alert('no id you should save');
-        }
+    updateVehicle(e) {
+
         e.preventDefault();
-        if (this.isAnyFieldNull()) {
-            alert("fields are null");
-            return;
-        }
-        const guideName = this.guideNameElement.val();
-        const dob = this.guideDobElement.val();
-        let gender;
-        if (document.getElementById("male").checked) {
-            gender = "MALE";
-        } else if (document.getElementById("female").checked) {
-            gender = "FEMALE";
-        }
+        const vehicleId = this.vehicleIdEl.val();
+        const vehicleBrand = this.vehicleBrandEl.val();
+        const vehicleName = this.vehicleNameEl.val();
+        const vehicleCategory = this.vehicleCategoryEl.val();
+        const vehicleFuelType = this.vehicleFuelTypeEl.val();
+        const vehicleFuelConsumption = this.vehicleFuelConsumptionEl.val();
+        const vehicleType = this.vehicleTypeEl.val();
+        const vehicleNoOfSeats = this.vehicleNoOfSeatsEl.val();
+        const vehicleIsHybrid = this.vehicleIsHybridEl.val();
+        const vehicleTransmission = this.vehicleTransmissionEl.val();
+        const vehicleRemarks = this.vehicleRemarksEl.val();
+        const vehicleDriverName = this.vehicleDriverNameEl.val();
+        const vehicleDriverContact = this.vehicleDriverContactEl.val();
+        const vehicleMainImage = this.vehicleMainImageEl[0].files[0];
+        const vehicleImgFront = this.vehicleImgFrontEl[0].files[0];
+        const vehicleImgBack = this.vehicleImgBackEl[0].files[0];
+        const vehicleImgFrontInterior = this.vehicleImgFrontInteriorEl[0].files[0];
+        const vehicleImgBackInterior = this.vehicleImgBackInteriorEl[0].files[0];
 
 
-        const contact = this.contactElement.val();
-        const guideExperience = this.guideExperienceElement.val();
-        const guideRemarks = this.guideRemarksElement.val();
-        const guideIdImgFront = $('#guideIdImgFront')[0].files[0];
-        const guideIdImgBack = $('#guideIdImgBack')[0].files[0];
-        const guideProfileImg = $('#guideProfileImg')[0].files[0];
+        const dto = new VehicleDTO(vehicleBrand,
+            vehicleName,
+            vehicleCategory,
+            vehicleFuelType,
+            vehicleFuelConsumption,
+            vehicleIsHybrid,
+            vehicleNoOfSeats,
+            vehicleType,
+            vehicleTransmission,
+            vehicleRemarks,
+            vehicleDriverName,
+            vehicleDriverContact);
 
-
-        const dto = new GuideDTO(guideName, dob, gender, contact, guideExperience, guideRemarks);
         const formData = new FormData();
         const jsonDTO = JSON.stringify(dto);
         const blob = new Blob([jsonDTO], {type: 'application/json'});
 
-        formData.set("guideDTO", blob);
-        if (guideIdImgFront !== null) {
-            formData.set("guideIdImgFront", guideIdImgFront);
+
+        formData.set("vehicleDTO", blob);
+        if (vehicleMainImage !== null) {
+            formData.set("vehicleMainImage", vehicleMainImage);
         }
-        if (guideIdImgBack !== null) {
-            formData.set("guideIdImgBack", guideIdImgBack);
+        if (vehicleImgFront !== null) {
+            formData.set("vehicleImgFront", vehicleImgFront);
         }
-        if (guideProfileImg !== null) {
-            formData.set("guideProfileImage", guideProfileImg);
+        if (vehicleImgBack !== null) {
+            formData.set("vehicleImgBack", vehicleImgBack);
         }
+        if (vehicleImgFrontInterior !== null) {
+            formData.set("vehicleImgFrontInterior", vehicleImgFrontInterior);
+
+        }
+        if (vehicleImgBackInterior !== null) {
+            formData.set("vehicleImgBackInterior", vehicleImgBackInterior);
+        }
+        console.log(dto);
         $.ajax({
             type: "PUT",
-            url: this.guideApiUrl + "/" + this.guideIdElement.val(),
+            url: this.vehicleApiUrl + "/" + vehicleId,
             data: formData,
             processData: false,
             contentType: false,
             success: () => {
-                console.log("Guide updated successfully");
+                console.log("Vehicle updated successfully");
                 this.clearInputFields();
-                this.getAllGuides();
-                $("#imageIdFrontSection, #imageIdBackSection, #guideImageSection").hide();
+                this.getAllVehicles();
+                $("#vehicleMainPicSection, #vehicleFrontPicSection,#vehicleBackPicSection,#vehicleBackInteriorPicSection, #vehicleFrontInteriorPicSection").hide();
             },
             error: (error) => {
-                console.error("Error saving guide: " + error.responseText);
+                console.error("Error saving vehicle: " + error.responseText);
             }
-        });*/
+        });
     }
 
     getAllVehicles() {
@@ -215,10 +236,10 @@ export class VehicleController {
             vehicleCard.id = vehicle.vehicleId;
             vehicleCard.innerHTML = `
                             <div class="card-body">
-                                <h6 class="mb-2">Vehicle Id : <span class="guideId" style="color: #0a53be">${vehicle.vehicleId}</span></h6>
-                                <h5 class="card-title">${vehicle.vehicleName}</h5>
+                                <h6 class="mb-2">Vehicle Id : <span class="guideId" style="color: #96C2DB">${vehicle.vehicleId}</span></h6>
+                                <h6 class="card-title text-small">Vehicle Name : ${vehicle.vehicleName}</h6>
                                 <img class="card-img-top" src="data:image/**;base64,${vehicle.vehicleMainImage}" alt="Card image cap">
-                                <h5 class="contact mt-3">${vehicle.vehicleBrand}</h5>
+                                <h6 class="contact mt-3">Vehicle Brand : ${vehicle.vehicleBrand}</h6>
                                 <button id="delete" class="btn btn-danger" data-bs-toggle = "modal" data-bs-target="#modal">Delete</button>
                             </div>`;
             vehiclesContainer.appendChild(vehicleCard);
@@ -226,6 +247,8 @@ export class VehicleController {
     }
 
     clearInputFields() {
+
+        this.vehicleIdEl.val('');
         this.vehicleBrandEl.val('');
         this.vehicleNameEl.val('');
         this.vehicleCategoryEl.val('');
@@ -233,11 +256,16 @@ export class VehicleController {
         this.vehicleFuelConsumptionEl.val('');
         this.vehicleTypeEl.val('');
         this.vehicleNoOfSeatsEl.val('');
-        this.vehicleIsHybridEl.val('');
+        this.vehicleIsHybridEl.val('false');
         this.vehicleTransmissionEl.val('');
         this.vehicleRemarksEl.val('');
         this.vehicleDriverNameEl.val('');
         this.vehicleDriverContactEl.val('');
+        this.vehicleMainImageEl.val('');
+        this.vehicleImgBackEl.val('');
+        this.vehicleImgFrontEl.val('');
+        this.vehicleImgFrontInteriorEl.val('');
+        this.vehicleImgBackInteriorEl.val('');
         this.vehicleMainPicSectionEl.css('display', 'none');
         this.vehicleFrontPicSectionEl.css('display', 'none');
         this.vehicleBackPicSectionEl.css('display', 'none');
@@ -246,33 +274,44 @@ export class VehicleController {
     }
 
     clickOnCard(e) {
-        /*    const target = $(e.target);
+        const target = $(e.target);
 
-            const guideId = e.currentTarget.id;
-            const guide = this.guides.find(value => value.guideId === guideId);
-            this.selectedGuide = guide;
-            if (target.is('#delete')) {
-                return;
-            }
-            this.guideNameElement.val(guide.guideName);
-            this.guideDobElement.val(guide.dob);
-            this.contactElement.val(guide.contact);
-            this.guideExperienceElement.val(guide.guideExperience);
-            this.guideRemarksElement.val(guide.guide_remarks);
+        const vehicleId = e.currentTarget.id;
+        const vehicle = this.vehicles.find(value => value.vehicleId === vehicleId);
+        this.selectedVehicle = vehicle;
+        console.log(vehicle)
+        if (target.is('#delete')) {
+            this.deleteVehicle(vehicleId);
+            return;
+        }
+        this.vehicleIdEl.val(vehicle.vehicleId);
+        this.vehicleBrandEl.val(vehicle.vehicleBrand);
+        this.vehicleNameEl.val(vehicle.vehicleName);
+        this.vehicleCategoryEl.val(vehicle.vehicleCategory);
+        this.vehicleFuelTypeEl.val(vehicle.vehicleFuelType);
+        this.vehicleFuelConsumptionEl.val(vehicle.vehicleFuelConsumption);
+        this.vehicleTypeEl.val(vehicle.vehicleType);
+        this.vehicleNoOfSeatsEl.val(vehicle.vehicleNoOfSeats);
+        this.vehicleIsHybridEl.val(vehicle.vehicleIsHybrid.toString());
+        this.vehicleTransmissionEl.val(vehicle.vehicleTransmission);
+        this.vehicleRemarksEl.val(vehicle.vehicleRemarks);
+        this.vehicleDriverNameEl.val(vehicle.vehicleDriverName);
+        this.vehicleDriverContactEl.val(vehicle.vehicleDriverContact);
 
 
-            this.imageIdFrontElement.attr('src', `data:image/!**;base64,${guide.guideIdImgFront}`);
-            this.imageIdFrontSectionElement.css('display', 'block');
-            this.imageIdBackElement.attr('src', `data:image/!**;base64,${guide.guideIdImgBack}`);
-            this.imageIdBackSectionElement.css('display', 'block');
-            this.profileImageElement.attr('src', `data:image/!**;base64,${guide.guideProfileImage}`);
-            this.profileImageSectionElement.css('display', 'block');
+        this.vehicleMainPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleMainImage}`);
 
-            this.guideIdElement.val(guideId);
-            $('#guideIdImgFront').val('');
-            $('#guideIdImgBack').val('');
-            $('#guideProfileImg').val('');
-            this.selectedGuide = null;*/
+        this.vehicleFrontPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleImgFront}`);
+        this.vehicleBackPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleImgBack}`);
+        this.vehicleFrontInteriorPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleImgFrontInterior}`);
+        this.vehicleBackInteriorPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleImgBackInterior}`);
+
+        this.vehicleMainPicSectionEl.css('display', 'block');
+        this.vehicleFrontPicSectionEl.css('display', 'block');
+        this.vehicleBackPicSectionEl.css('display', 'block');
+        this.vehicleBackInteriorPicSectionEl.css('display', 'block');
+        this.vehicleFrontInteriorPicSectionEl.css('display', 'block');
+        console.log(vehicle);
     }
 
     isAnyFieldNull() {
@@ -300,16 +339,24 @@ export class VehicleController {
 
 
     imagesEmpty() {
-        const guideIdImgFront = $('#guideIdImgFront')[0].files[0];
-        const guideIdImgBack = $('#guideIdImgBack')[0].files[0];
-        const guideProfileImg = $('#guideProfileImg')[0].files[0];
-        if (guideIdImgFront === null || guideIdImgFront === undefined || guideIdImgFront === "") {
+        const vehicleMainImage = this.vehicleMainImageEl[0].files[0];
+        const vehicleImgBack = this.vehicleImgBackEl[0].files[0];
+        const vehicleImgFront = this.vehicleImgFrontEl[0].files[0];
+        const vehicleImgFrontInterior = this.vehicleImgFrontInteriorEl[0].files[0];
+        const vehicleImgBackInterior = this.vehicleImgBackInteriorEl[0].files[0];
+        if (vehicleMainImage === null || vehicleMainImage === undefined || vehicleMainImage === "") {
             return true;
         }
-        if (guideIdImgBack === null || guideIdImgBack === undefined || guideIdImgBack === "") {
+        if (vehicleImgBack === null || vehicleImgBack === undefined || vehicleImgBack === "") {
             return true;
         }
-        if (guideProfileImg === null || guideProfileImg === undefined || guideProfileImg === "") {
+        if (vehicleImgFront === null || vehicleImgFront === undefined || vehicleImgFront === "") {
+            return true;
+        }
+        if (vehicleImgFrontInterior === null || vehicleImgFrontInterior === undefined || vehicleImgFrontInterior === "") {
+            return true;
+        }
+        if (vehicleImgBackInterior === null || vehicleImgBackInterior === undefined || vehicleImgBackInterior === "") {
             return true;
         }
         return false;
