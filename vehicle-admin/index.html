@@ -33,6 +33,13 @@
           <input type="text" class="form-control mt-1" id="vehicleBrand" placeholder="Enter Vehicle Brand" required>
         </div>
       </div>
+
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="form-group">
+          <label for="vehicleName">Vehicle Name</label>
+          <input type="text" class="form-control mt-1" id="vehicleName" placeholder="Enter Vehicle Name" required>
+        </div>
+      </div>
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
         <div class="form-group mt-1">
           <label for="vehicleCategory">Select Vehicle Category:</label>
@@ -51,8 +58,8 @@
           <label for="vehicleFuelType">Select Vehicle Fuel Type:</label>
           <select class="field form-select" id="vehicleFuelType">
             <option value="">Select a category</option>
-            <option value="DIESEL">One Star</option>
-            <option value="DIESEL">Two Star</option>
+            <option value="DIESEL">Diesel</option>
+            <option value="PETROL">Petrol</option>
           </select>
           <div class="invalid-feedback">Select a Category</div>
         </div>
@@ -67,23 +74,23 @@
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
         <div class="form-group mt-1">
           <label for="vehicleType">Vehicle Hybrid</label>
-          <select class="field form-select" id="vehicleType">
-            <option value="NO">NO</option>
-            <option value="YES">YES</option>
+          <select class="field form-select" id="vehicleIsHybrid">
+            <option value="false">NO</option>
+            <option value="true">YES</option>
           </select>
         </div>
       </div>
       <div class="col-lg-3 col-md-4 col-sm-12 mt-4 ">
         <div class="form-group">
-          <label for="vehicleNoOfSeats">No of Vehicle Seats</label>
+          <label for="vehicleNoOfSeats">No of Vehicle Seats (excluding driver)</label>
           <input type="number" class="form-control mt-1" id="vehicleNoOfSeats" placeholder="Enter No of Vehicle Seats"
                  required>
         </div>
       </div>
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
         <div class="form-group mt-1">
-          <label for="vehicleIsHybrid">Vehicle Type</label>
-          <select class="field form-select" id="vehicleIsHybrid">
+          <label for="vehicleType">Vehicle Type</label>
+          <select class="field form-select" id="vehicleType">
             <option value="">Select a vehicle type</option>
             <option value="CAR">Car</option>
             <option value="VAN">Van</option>
@@ -113,6 +120,14 @@
         <div class="form-group">
           <label for="vehicleDriverName">Vehicle Driver Name</label>
           <input type="text" class="form-control mt-1" id="vehicleDriverName" placeholder="Enter Vehicle Driver Name"
+                 required>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
+        <div class="form-group">
+          <label for="vehicleDriverContact">Vehicle Driver Contact</label>
+          <input type="text" class="form-control mt-1" id="vehicleDriverContact"
+                 placeholder="Enter Vehicle Driver Contact"
                  required>
         </div>
       </div>
@@ -173,8 +188,14 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleBackInteriorPicSection">
           <div>
-            <h4 class="mt-3">Vehicle Image Back</h4>
+            <h4 class="mt-3">Vehicle Image Back Interior</h4>
             <img id="vehicleBackInteriorPic" class="col-12 imgSize" src="" alt="img">
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleFrontInteriorPicSection">
+          <div>
+            <h4 class="mt-3">Vehicle Image Front</h4>
+            <img id="vehicleFrontInteriorPic" class="col-12 imgSize" src="" alt="img">
           </div>
         </div>
       </div>
@@ -184,13 +205,13 @@
   <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
       <div class="form-group">
-        <label for="searchGuide">Search Vehicle</label>
-        <input type="text" class="form-control mt-1" id="searchGuide" placeholder="Search here" required>
+        <label for="searchVehicle">Search Vehicle</label>
+        <input type="text" class="form-control mt-1" id="searchVehicle" placeholder="Search here" required>
       </div>
     </div>
   </div>
   <div class="container">
-    <div class="row" id="guidesContainer"></div>
+    <div class="row" id="vehiclesContainer"></div>
   </div>
 
   <!--  modal delete----------------------------------------------->

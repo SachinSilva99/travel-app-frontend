@@ -1,3 +1,7 @@
+import {VehicleController} from "./controller/GuideController.js";
+
+new VehicleController();
+
 function handleImageChange(inputElement, imageElement, imageSectionElement) {
     inputElement.addEventListener('change', function (event) {
         if (event.target.files && event.target.files[0]) {
@@ -36,4 +40,9 @@ handleImageChange(
     document.getElementById('vehicleImgBackInterior'),
     document.getElementById('vehicleBackInteriorPic'),
     document.getElementById('vehicleBackInteriorPicSection')
+);
+handleImageChange(
+    document.getElementById('vehicleImgFrontInterior'),
+    document.getElementById('vehicleFrontInteriorPic'),
+    document.getElementById('vehicleFrontInteriorPicSection')
 );

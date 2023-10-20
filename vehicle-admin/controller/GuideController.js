@@ -1,42 +1,51 @@
-
 import {StandardResponse} from "../model/StandardResponse.js";
+import {VehicleDTO} from "../model/VehicleDTO.js";
 
-export class GuideController {
+export class VehicleController {
     constructor() {
-        this.guideApiUrl = "http://localhost:8097/guideservice/api/v1/guides";
-        $('#addBtn').click(this.createGuide.bind(this));
-        $('#deleteYes').click(this.deleteGuide.bind(this));
-        $('#updateBtn').click(this.updateGuide.bind(this));
-        this.guideExperienceElement = $('#guideExperience');
-        this.guideRemarksElement = $('#guideRemarks');
+        this.vehicleApiUrl = "http://localhost:8095/vehicleservice/api/v1/vehicles";
+        this.getAllVehicles();
+        this.vehicles = [];
+        $('#addBtn').click(this.createVehicle.bind(this));
+        $('#deleteYes').click(this.deleteVehicle.bind(this));
+        $('#updateBtn').click(this.updateVehicle.bind(this));
+        this.vehicleIdEl = $('#vehicleId');
+        this.vehicleNameEl = $('#vehicleName');
+        this.vehicleBrandEl = $('#vehicleBrand');
+        this.vehicleCategoryEl = $('#vehicleCategory');
+        this.vehicleFuelTypeEl = $('#vehicleFuelType');
+        this.vehicleFuelConsumptionEl = $('#vehicleFuelConsumption');
+        this.vehicleTypeEl = $('#vehicleType');
+        this.vehicleNoOfSeatsEl = $('#vehicleNoOfSeats');
+        this.vehicleIsHybridEl = $('#vehicleIsHybrid');
+        this.vehicleTransmissionEl = $('#vehicleTransmission');
+        this.vehicleRemarksEl = $('#vehicleRemarks');
+        this.vehicleDriverNameEl = $('#vehicleDriverName');
+        this.vehicleDriverContactEl = $('#vehicleDriverContact');
+        this.vehicleMainImageEl = $('#vehicleMainImage');
+        this.vehicleImgFrontEl = $('#vehicleImgFront');
+        this.vehicleImgBackEl = $('#vehicleImgBack');
+        this.vehicleImgFrontInteriorEl = $('#vehicleImgFrontInterior');
+        this.vehicleImgBackInteriorEl = $('#vehicleImgBackInterior');
+        this.vehicleMainPicSectionEl = $('#vehicleMainPicSection');
+        this.vehicleFrontPicSectionEl = $('#vehicleFrontPicSection');
+        this.vehicleBackPicSectionEl = $('#vehicleBackPicSection');
+        this.vehicleBackInteriorPicSectionEl = $('#vehicleBackInteriorPicSection');
+        this.vehicleFrontInteriorPicSectionEl = $('#vehicleFrontInteriorPicSection');
         $('#clearFieldBtn').click(this.clearInputFields.bind(this));
-        this.guideNameElement = $('#guideName');
-        this.guideDobElement = $('#dob');
-        this.contactElement = $('#phoneNumber');
-        this.guideIdElement = $('#guideId');
-        this.getAllGuides();
+        this.getAllVehicles();
         $('#guidesContainer').on('click', '.card', this.clickOnCard.bind(this));
-        this.guides = [];
-        this.imageIdFrontElement = $('#imageIdFront');
-        this.imageIdFrontSectionElement = $('#imageIdFrontSection');
-        this.imageIdBackElement = $('#imageIdBack');
-        this.imageIdBackSectionElement = $('#imageIdBackSection');
-        this.profileImageElement = $('#guideImagePicture');
-        this.profileImageSectionElement = $('#guideImageSection');
-        $('#searchGuide').on('keyup', this.searchGuides.bind(this));
-        this.searchFieldElement = $('#searchGuide');
-        this.selectedGuide = null;
-
+        $('#searchVehicle').on('keyup', this.searchGuides.bind(this));
     }
 
-    deleteGuide() {
+    deleteVehicle() {
         const guideId = this.selectedGuide.guideId;
         $.ajax({
             url: this.guideApiUrl + "/" + guideId,
             type: "DELETE",
             success: () => {
                 alert("Guide deleted successfully");
-                this.getAllGuides();
+                this.getAllVehicles();
             },
             error: function () {
                 alert("Failed to delete guide");
@@ -52,60 +61,71 @@ export class GuideController {
 
     }
 
-    createGuide(e) {
-        if (this.isAnyFieldNull()) {
-            alert('check fields');
-        }
-        if (this.imagesEmpty()) {
-            alert('check images');
-        }
+    createVehicle(e) {
         e.preventDefault();
-        const guideName = this.guideNameElement.val();
-        const dob = this.guideDobElement.val();
-        let gender;
-        if (document.getElementById("male").checked) {
-            gender = "MALE";
-        } else if (document.getElementById("female").checked) {
-            gender = "FEMALE";
-        }
+        const vehicleBrand = this.vehicleBrandEl.val();
+        const vehicleName = this.vehicleNameEl.val();
+        const vehicleCategory = this.vehicleCategoryEl.val();
+        const vehicleFuelType = this.vehicleFuelTypeEl.val();
+        const vehicleFuelConsumption = this.vehicleFuelConsumptionEl.val();
+        const vehicleType = this.vehicleTypeEl.val();
+        const vehicleNoOfSeats = this.vehicleNoOfSeatsEl.val();
+        const vehicleIsHybrid = this.vehicleIsHybridEl.val();
+        const vehicleTransmission = this.vehicleTransmissionEl.val();
+        const vehicleRemarks = this.vehicleRemarksEl.val();
+        const vehicleDriverName = this.vehicleDriverNameEl.val();
+        const vehicleDriverContact = this.vehicleDriverContactEl.val();
+        const vehicleMainImage = this.vehicleMainImageEl[0].files[0];
+        const vehicleImgFront = this.vehicleImgFrontEl[0].files[0];
+        const vehicleImgBack = this.vehicleImgBackEl[0].files[0];
+        const vehicleImgFrontInterior = this.vehicleImgFrontInteriorEl[0].files[0];
+        const vehicleImgBackInterior = this.vehicleImgBackInteriorEl[0].files[0];
 
 
-        const contact = this.contactElement.val();
-        const guideExperience = this.guideExperienceElement.val();
-        const guideRemarks = this.guideRemarksElement.val();
-        const guideIdImgFront = $('#guideIdImgFront')[0].files[0];
-        const guideIdImgBack = $('#guideIdImgBack')[0].files[0];
-        const guideProfileImg = $('#guideProfileImg')[0].files[0];
-        const dto = new GuideDTO(guideName, dob, gender, contact, guideExperience, guideRemarks);
+        const dto = new VehicleDTO(vehicleBrand,
+            vehicleName,
+            vehicleCategory,
+            vehicleFuelType,
+            vehicleFuelConsumption,
+            vehicleIsHybrid,
+            vehicleNoOfSeats,
+            vehicleType,
+            vehicleTransmission,
+            vehicleRemarks,
+            vehicleDriverName,
+            vehicleDriverContact);
+
         const formData = new FormData();
         const jsonDTO = JSON.stringify(dto);
         const blob = new Blob([jsonDTO], {type: 'application/json'});
 
 
-        formData.set("guideDTO", blob);
-        formData.set("guideIdImgFront", guideIdImgFront);
-        formData.set("guideIdImgBack", guideIdImgBack);
-        formData.set("guideProfileImage", guideProfileImg);
-
+        formData.set("vehicleDTO", blob);
+        formData.set("vehicleMainImage", vehicleMainImage);
+        formData.set("vehicleImgFront", vehicleImgFront);
+        formData.set("vehicleImgBack", vehicleImgBack);
+        formData.set("vehicleImgFrontInterior", vehicleImgFrontInterior);
+        formData.set("vehicleImgBackInterior", vehicleImgBackInterior);
+        console.log(dto);
         $.ajax({
             type: "POST",
-            url: this.guideApiUrl,
+            url: this.vehicleApiUrl,
             data: formData,
             processData: false,
             contentType: false,
             success: (response) => {
-                console.log("Guide saved successfully. User ID: " + response.data);
+                console.log("Vehicle saved successfully. Vehicle ID: " + response.data);
                 this.clearInputFields();
-                this.getAllGuides();
-                $("#imageIdFrontSection, #imageIdBackSection, #guideImageSection").hide();
+                this.getAllVehicles();
+                $("#vehicleMainPicSection, #vehicleFrontPicSection,#vehicleBackPicSection,#vehicleBackInteriorPicSection, #vehicleFrontInteriorPicSection").hide();
             },
             error: (error) => {
-                console.error("Error saving guide: " + error.responseText);
+                console.error("Error saving vehicle: " + error.responseText);
             }
         });
     }
 
-    updateGuide(e) {
+    updateVehicle(e) {/*
         const guideId = this.guideIdElement.val();
         if (guideId === null || guideId === undefined || guideId === "") {
             alert('no id you should save');
@@ -163,17 +183,18 @@ export class GuideController {
             error: (error) => {
                 console.error("Error saving guide: " + error.responseText);
             }
-        });
+        });*/
     }
 
-    getAllGuides() {
+    getAllVehicles() {
         $.ajax({
-            url: this.guideApiUrl,
+            url: this.vehicleApiUrl,
             type: "GET",
             dataType: "json",
             success: (res) => {
                 const standardResponse = new StandardResponse(res.code, res.msg, res.data);
-                this.guides = standardResponse.data;
+                this.vehicles = standardResponse.data;
+                console.log('res', this.vehicles);
                 this.loadData(standardResponse.data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -184,92 +205,97 @@ export class GuideController {
 
 
     loadData(data) {
-        const guidesContainer = document.getElementById("guidesContainer");
-        guidesContainer.innerHTML = "";
+        const vehiclesContainer = document.getElementById("vehiclesContainer");
+        vehiclesContainer.innerHTML = "";
 
         console.log(data);
-        data.forEach((guide) => {
-            const guideCard = document.createElement("div");
-            guideCard.className = "card col-lg-3 col-md-6 col-sm-12 m-4";
-            guideCard.id = guide.guideId;
-            guideCard.innerHTML = `
+        data.forEach((vehicle) => {
+            const vehicleCard = document.createElement("div");
+            vehicleCard.className = "card col-lg-3 col-md-6 col-sm-12 m-4";
+            vehicleCard.id = vehicle.vehicleId;
+            vehicleCard.innerHTML = `
                             <div class="card-body">
-                                <h6 class="mb-2">Guide Id: <span class="guideId" style="color: #0a53be">${guide.guideId}</span></h6>
-                                <h5 class="card-title">${guide.guideName}</h5>
-                                <img class="card-img-top" src="data:image/**;base64,${guide.guideProfileImage}" alt="Card image cap">
-                                <h5 class="contact mt-3">${guide.contact}</h5>
+                                <h6 class="mb-2">Vehicle Id : <span class="guideId" style="color: #0a53be">${vehicle.vehicleId}</span></h6>
+                                <h5 class="card-title">${vehicle.vehicleName}</h5>
+                                <img class="card-img-top" src="data:image/**;base64,${vehicle.vehicleMainImage}" alt="Card image cap">
+                                <h5 class="contact mt-3">${vehicle.vehicleBrand}</h5>
                                 <button id="delete" class="btn btn-danger" data-bs-toggle = "modal" data-bs-target="#modal">Delete</button>
                             </div>`;
-            guidesContainer.appendChild(guideCard);
+            vehiclesContainer.appendChild(vehicleCard);
         });
     }
 
     clearInputFields() {
-        this.guideNameElement.val('');
-        this.guideIdElement.val('');
-        this.guideDobElement.val('');
-        this.contactElement.val('');
-        this.guideExperienceElement.val('');
-        this.guideRemarksElement.val('');
-        $('#guideIdImgFront').val('');
-        $('#guideIdImgBack').val('');
-        $('#guideProfileImg').val('');
-        this.imageIdFrontSectionElement.css('display', 'none');
-        this.imageIdBackSectionElement.css('display', 'none');
-        this.profileImageSectionElement.css('display', 'none');
+        this.vehicleBrandEl.val('');
+        this.vehicleNameEl.val('');
+        this.vehicleCategoryEl.val('');
+        this.vehicleFuelTypeEl.val('');
+        this.vehicleFuelConsumptionEl.val('');
+        this.vehicleTypeEl.val('');
+        this.vehicleNoOfSeatsEl.val('');
+        this.vehicleIsHybridEl.val('');
+        this.vehicleTransmissionEl.val('');
+        this.vehicleRemarksEl.val('');
+        this.vehicleDriverNameEl.val('');
+        this.vehicleDriverContactEl.val('');
+        this.vehicleMainPicSectionEl.css('display', 'none');
+        this.vehicleFrontPicSectionEl.css('display', 'none');
+        this.vehicleBackPicSectionEl.css('display', 'none');
+        this.vehicleBackInteriorPicSectionEl.css('display', 'none');
+        this.vehicleFrontInteriorPicSectionEl.css('display', 'none');
     }
 
     clickOnCard(e) {
-        const target = $(e.target);
+        /*    const target = $(e.target);
 
-        const guideId = e.currentTarget.id;
-        const guide = this.guides.find(value => value.guideId === guideId);
-        this.selectedGuide = guide;
-        if (target.is('#delete')) {
-            return;
-        }
-        this.guideNameElement.val(guide.guideName);
-        this.guideDobElement.val(guide.dob);
-        this.contactElement.val(guide.contact);
-        this.guideExperienceElement.val(guide.guideExperience);
-        this.guideRemarksElement.val(guide.guide_remarks);
+            const guideId = e.currentTarget.id;
+            const guide = this.guides.find(value => value.guideId === guideId);
+            this.selectedGuide = guide;
+            if (target.is('#delete')) {
+                return;
+            }
+            this.guideNameElement.val(guide.guideName);
+            this.guideDobElement.val(guide.dob);
+            this.contactElement.val(guide.contact);
+            this.guideExperienceElement.val(guide.guideExperience);
+            this.guideRemarksElement.val(guide.guide_remarks);
 
 
-        this.imageIdFrontElement.attr('src', `data:image/**;base64,${guide.guideIdImgFront}`);
-        this.imageIdFrontSectionElement.css('display', 'block');
-        this.imageIdBackElement.attr('src', `data:image/**;base64,${guide.guideIdImgBack}`);
-        this.imageIdBackSectionElement.css('display', 'block');
-        this.profileImageElement.attr('src', `data:image/**;base64,${guide.guideProfileImage}`);
-        this.profileImageSectionElement.css('display', 'block');
+            this.imageIdFrontElement.attr('src', `data:image/!**;base64,${guide.guideIdImgFront}`);
+            this.imageIdFrontSectionElement.css('display', 'block');
+            this.imageIdBackElement.attr('src', `data:image/!**;base64,${guide.guideIdImgBack}`);
+            this.imageIdBackSectionElement.css('display', 'block');
+            this.profileImageElement.attr('src', `data:image/!**;base64,${guide.guideProfileImage}`);
+            this.profileImageSectionElement.css('display', 'block');
 
-        this.guideIdElement.val(guideId);
-        $('#guideIdImgFront').val('');
-        $('#guideIdImgBack').val('');
-        $('#guideProfileImg').val('');
-        this.selectedGuide = null;
+            this.guideIdElement.val(guideId);
+            $('#guideIdImgFront').val('');
+            $('#guideIdImgBack').val('');
+            $('#guideProfileImg').val('');
+            this.selectedGuide = null;*/
     }
 
     isAnyFieldNull() {
-        const guideName = this.guideNameElement.val();
-        const guideDob = this.guideDobElement.val();
-        const contact = this.contactElement.val();
-        const experience = this.guideExperienceElement.val();
-        const remarks = this.guideRemarksElement.val();
+        /*     const guideName = this.guideNameElement.val();
+             const guideDob = this.guideDobElement.val();
+             const contact = this.contactElement.val();
+             const experience = this.guideExperienceElement.val();
+             const remarks = this.guideRemarksElement.val();
 
-        if (guideName === null || guideName === undefined || guideName === "") {
-            return true;
-        }
+             if (guideName === null || guideName === undefined || guideName === "") {
+                 return true;
+             }
 
-        if (guideDob === null || guideDob === undefined || guideDob === "") {
-            return true;
-        }
-        if (contact === null || contact === undefined || contact === "") {
-            return true;
-        }
-        if (experience === null || experience === undefined || experience === "") {
-            return true;
-        }
-        return remarks === null || remarks === undefined || remarks === "";
+             if (guideDob === null || guideDob === undefined || guideDob === "") {
+                 return true;
+             }
+             if (contact === null || contact === undefined || contact === "") {
+                 return true;
+             }
+             if (experience === null || experience === undefined || experience === "") {
+                 return true;
+             }
+             return remarks === null || remarks === undefined || remarks === "";*/
     }
 
 
