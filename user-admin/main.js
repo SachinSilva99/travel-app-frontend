@@ -1,6 +1,5 @@
-/*import {UserController} from "./controller/UserController.js";
+import {UserController} from "./controller/UserController.js";
 
-new UserController();
 
 function handleImageChange(inputElement, imageView, sectionView) {
     inputElement.on('change', function (event) {
@@ -34,20 +33,10 @@ $(document).ready(function () {
     handleImageChange(profilePictureInput, profilePicture, profilePicturePicSection);
     handleImageChange(nicPassportBackInput, nicPassportBackImg, nicPassportBackImgSection);
     handleImageChange(nicPassportFrontInput, nicPassportFront, nicPassportFrontImgSection);
-});*/
-
-const storedAccessToken = localStorage.getItem('accessToken');
-
-$.ajax({
-    type: "GET",
-    url: "http://localhost:8090/userservice/api/v1/users",
-    headers: {
-        'Authorization': `Bearer ${storedAccessToken}`
-    },
-    dataType: "json",
-    success: (res) => {
-        console.log(res);
-    },
-    error:  (error)=> {
-        console.error("Error saving guide: " + error.responseText);    }
 });
+new UserController();
+
+
+
+
+
