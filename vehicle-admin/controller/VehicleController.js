@@ -8,6 +8,7 @@ export class VehicleController {
         this.vehicles = [];
         $('#addBtn').click(this.createVehicle.bind(this));
         $('#updateBtn').click(this.updateVehicle.bind(this));
+        $('#deleteYesBtn').click(this.deleteVehicle.bind(this));
         this.vehicleIdEl = $('#vehicleId');
         this.vehicleNameEl = $('#vehicleName');
         this.vehicleBrandEl = $('#vehicleBrand');
@@ -36,33 +37,36 @@ export class VehicleController {
         this.vehicleBackPicSectionEl = $('#vehicleBackPicSection');
         this.vehicleBackInteriorPicSectionEl = $('#vehicleBackInteriorPicSection');
         this.vehicleFrontInteriorPicSectionEl = $('#vehicleFrontInteriorPicSection');
+        this.vehicleSearchEl = $('#searchVehicle');
         this.selectedVehicle = null;
         $('#clearFieldBtn').click(this.clearInputFields.bind(this));
         $('#vehiclesContainer').on('click', '.card', this.clickOnCard.bind(this));
-        $('#searchVehicle').on('keyup', this.searchVehicles.bind(this));
+        this.vehicleSearchEl.on('keyup', this.searchVehicles.bind(this));
     }
 
-    deleteVehicle(vehicleId) {
+    deleteVehicle() {
+        console.log(this.selectedVehicle.vehicleId);
+        const vehicleId = this.selectedVehicle.vehicleId;
 
-        console.log(vehicleId)
-       /* $.ajax({
-            url: this.vehicleApiUrl + '/' + this.selectedImageId,
+        this.getAllVehicles();
+        $.ajax({
+            url: this.vehicleApiUrl + '/' + vehicleId,
             type: "DELETE",
             success: () => {
-                const imageContainerId = `imageContainer_${this.selectedImageId}`;
-                $(`#${imageContainerId}`).remove();
+                $(`#${vehicleId}`).remove();
                 this.selectedImageId = null;
-                this.getAllHotels();
+                console.log('deleted');
             },
             error: function () {
                 alert("Failed to delete guide");
             }
-        });*/
+        });
     }
 
+
     searchVehicles() {
-        const searchResults = this.guides.filter(guide => {
-            return guide.guideName.includes(this.searchFieldElement.val()) || guide.contact.includes(this.searchFieldElement.val());
+        const searchResults = this.vehicles.filter(vehicle => {
+            return vehicle.vehicleName.includes(this.vehicleSearchEl.val()) || vehicle.vehicleBrand.includes(this.vehicleSearchEl.val());
         });
         this.loadData(searchResults);
     }
@@ -281,7 +285,6 @@ export class VehicleController {
         this.selectedVehicle = vehicle;
         console.log(vehicle)
         if (target.is('#delete')) {
-            this.deleteVehicle(vehicleId);
             return;
         }
         this.vehicleIdEl.val(vehicle.vehicleId);

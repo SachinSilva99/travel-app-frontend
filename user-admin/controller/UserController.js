@@ -10,7 +10,7 @@ export class UserController {
         this.getAllUsers();
 
         $('#addBtn').click(this.createUser.bind(this));
-        $('#deleteYes').click(this.deleteUser.bind(this));
+        $('#deleteUserYes').click(this.deleteUser.bind(this));
         $('#updateBtn').click(this.updateUser.bind(this));
         $('#logout').click(this.logout.bind(this));
         this.userIdEl = $('#userId');
@@ -29,10 +29,8 @@ export class UserController {
         this.userRemarksEl = $('#userRemarks');
         this.profilePicturePicEl = $('#profilePicturePic');
         this.profilePicturePicSection = $('#profilePicturePicSection');
-
         this.nicPassportBackPicEl = $('#nicPassportBackImg');
         this.nicPassportBackImgSection = $('#nicPassportBackImgSection');
-
         this.nicPassportFrontPicEl = $('#nicPassportFrontImg');
         this.nicPassportFrontImgSection = $('#nicPassportFrontImgSection');
 
@@ -43,24 +41,32 @@ export class UserController {
         $('#usersContainer').on('click', '.card', this.clickOnCard.bind(this));
         $('#searchGuide').on('keyup', this.searchUser.bind(this));
         this.searchFieldElement = $('#searchGuide');
-        this.selectedGuide = null;
+        this.selectedUser = null;
 
     }
 
 
     deleteUser() {
-        /*    const guideId = this.selectedGuide.guideId;
-            $.ajax({
-                url: this.guideApiUrl + "/" + guideId,
-                type: "DELETE",
-                success: () => {
-                    alert("Guide deleted successfully");
-                    this.getAllGuides();
-                },
-                error: function () {
-                    alert("Failed to delete guide");
-                }
-            });*/
+        const userId = this.selectedUser.userId;
+        console.log(userId);
+        if (this.selectedUser.username === localStorage.getItem('currentUser')) {
+            alert("you cannot delete the logged user");
+            return;
+        }
+        $.ajax({
+            url: this.userApiUrl + "/" + userId,
+            type: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${(this.storedAccessToken)}`
+            },
+            success: () => {
+                alert("User deleted successfully");
+                this.getAllUsers();
+            },
+            error: function () {
+                alert("Failed to delete guide");
+            }
+        });
     }
 
     searchUser() {
@@ -262,7 +268,7 @@ export class UserController {
         console.log('hello')
         const userId = e.currentTarget.id;
         const user = this.users.find(value => value.userId === userId);
-        this.selectedGuide = user;
+        this.selectedUser = user;
         if (target.is('#delete')) {
             return;
         }
@@ -292,7 +298,6 @@ export class UserController {
         this.profilePictureEl.val('')
         this.nicPassportBackEl.val('')
         this.nicPassportFrontEl.val('')
-        // this.selectedGuide = null;
     }
 
     isAnyFieldNull() {

@@ -23,8 +23,10 @@ export class GuideController {
         this.imageIdBackSectionElement = $('#imageIdBackSection');
         this.profileImageElement = $('#guideImagePicture');
         this.profileImageSectionElement = $('#guideImageSection');
-        $('#searchGuide').on('keyup', this.searchGuides.bind(this));
+        this.guideGenderElement = $('#guideGender');
         this.searchFieldElement = $('#searchGuide');
+        this.searchFieldElement.on('keyup', this.searchGuides.bind(this));
+
         this.selectedGuide = null;
 
     }
@@ -46,10 +48,14 @@ export class GuideController {
 
     searchGuides() {
         const searchResults = this.guides.filter(guide => {
-            return guide.guideName.includes(this.searchFieldElement.val()) || guide.contact.includes(this.searchFieldElement.val());
+            const guideName = guide.guideName.toLowerCase();
+            const guideContact = guide.contact.toLowerCase();
+            const searchText = this.searchFieldElement.val().toLowerCase();
+            if(guideName.includes(searchText) || guideContact.includes(searchText)){
+                return guide;
+            }
         });
         this.loadData(searchResults);
-
     }
 
     createGuide(e) {
@@ -62,14 +68,9 @@ export class GuideController {
         e.preventDefault();
         const guideName = this.guideNameElement.val();
         const dob = this.guideDobElement.val();
-        let gender;
-        if (document.getElementById("male").checked) {
-            gender = "MALE";
-        } else if (document.getElementById("female").checked) {
-            gender = "FEMALE";
-        }
 
 
+        const gender = this.guideGenderElement.val();
         const contact = this.contactElement.val();
         const guideExperience = this.guideExperienceElement.val();
         const guideRemarks = this.guideRemarksElement.val();
@@ -117,14 +118,7 @@ export class GuideController {
         }
         const guideName = this.guideNameElement.val();
         const dob = this.guideDobElement.val();
-        let gender;
-        if (document.getElementById("male").checked) {
-            gender = "MALE";
-        } else if (document.getElementById("female").checked) {
-            gender = "FEMALE";
-        }
-
-
+        const gender = this.guideGenderElement.val();
         const contact = this.contactElement.val();
         const guideExperience = this.guideExperienceElement.val();
         const guideRemarks = this.guideRemarksElement.val();
@@ -214,6 +208,7 @@ export class GuideController {
         $('#guideIdImgFront').val('');
         $('#guideIdImgBack').val('');
         $('#guideProfileImg').val('');
+        this.guideGenderElement.val('');
         this.imageIdFrontSectionElement.css('display', 'none');
         this.imageIdBackSectionElement.css('display', 'none');
         this.profileImageSectionElement.css('display', 'none');
@@ -233,7 +228,7 @@ export class GuideController {
         this.contactElement.val(guide.contact);
         this.guideExperienceElement.val(guide.guideExperience);
         this.guideRemarksElement.val(guide.guide_remarks);
-
+        this.guideGenderElement.val(guide.gender);
 
         this.imageIdFrontElement.attr('src', `data:image/**;base64,${guide.guideIdImgFront}`);
         this.imageIdFrontSectionElement.css('display', 'block');
@@ -255,7 +250,10 @@ export class GuideController {
         const contact = this.contactElement.val();
         const experience = this.guideExperienceElement.val();
         const remarks = this.guideRemarksElement.val();
-
+        const gender = this.guideGenderElement.val();
+        if (gender === null || gender === undefined || gender === "") {
+            return true;
+        }
         if (guideName === null || guideName === undefined || guideName === "") {
             return true;
         }

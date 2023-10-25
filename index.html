@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./lib/bootstrap-5.3.2-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Dashboard</title>
+</head>
+<body>
+<div class="superNav border-bottom py-2 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 centerOnMobile">
+        <span class="d-none d-lg-inline-block d-md-inline-block d-sm-inline-block d-xs-none me-3">
+          <strong>info@nexttravel.com</strong>
+        </span>
+        <span class="me-3"><i
+          class="fa-solid fa-phone me-1 text-warning"></i> <strong>1-532-123-1234</strong></span>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-none d-lg-block d-md-block-d-sm-block d-xs-none text-end">
+        <span class="me-3">
+          <i class="fa-solid fa-file  text-muted me-2"></i>
+          <a class="text-muted"
+             href="#">Policy</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#"><i class="fa-solid fa-shop me-2"></i> <strong>Next Travel</strong></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="mx-auto my-3 d-lg-none d-sm-block d-xs-block">
+      <div class="input-group">
+        <span class="input-group-text text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <input type="text" class="form-control ">
+        <button class="btn text-white" style="background-color: #96C2DB">Search</button>
+      </div>
+    </div>
+    <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+      <div class="ms-auto d-none d-lg-block">
+        <div class="input-group">
+          <span class="input-group-text text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" class="form-control">
+          <button class="btn  text-white" style="background-color: #96C2DB">Search</button>
+        </div>
+      </div>
+      <ul class="navbar-nav ms-auto ">
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase active" aria-current="page" href="#home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase active" aria-current="page" href="#hotels">Hotels</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase" href="#vehicles">Vehicles</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase" href="#guides">Guides</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto ">
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase" href="#"><i class="fa-solid fa-cart-shopping me-1"></i> Cart</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase" href="#"><i class="fa-solid fa-circle-user me-1"></i>
+            Account</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main>
+  <div id="home">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-12 m-3">
+          <p>Select your preferred package</p>
+          <select id="package-select" class="form-select" aria-label="Default select example">
+            <option value="" selected>Select a Travel Package</option>
+            <option value="REGULAR">Regular</option>
+            <option value="MID_LEVEL">Mid-Level</option>
+            <option value="LUXURY">Luxury</option>
+            <option value="SUPER_LUXURY">Super Luxury</option>
+          </select>
+        </div>
+        <div class="col-3 m-3">
+          <div id="package-details"></div>
+        </div>
+        <hr>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+          <div class="form-group">
+            <label for="tripStartDate">Trip Start Date</label>
+            <input type="date" class="form-control mt-1" id="tripStartDate">
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+          <div class="form-group">
+            <label for="tripEndDate">Trip End Date</label>
+            <input type="date" class="form-control mt-1" id="tripEndDate">
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-12 m-3">
+          <p>Select your preferred areas</p>
+          <select id="travelAreas" class="form-select" >
+            <option value="" selected>Select a Travel Area</option>
+            <option value="Beruwala">Beruwala</option>
+            <option value="Kaluthara">Kaluthara</option>
+          </select>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+          <p id="result"></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <h6 class="col text-start m-3">No of days remaining : <span id="noOfDaysRemaining"></span></h6>
+      </div>
+
+      <div class="container">
+        <div class="row hotelStayMain">
+          <h1>Hotel Stay</h1>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayStartDateMain">Hotel Stay Start Date</label>
+              <input type="date" class="form-control mt-1 hotelStayStartDate" id="hotelStayStartDateMain">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayEndDateMain">Hotel Stay End Date</label>
+              <input type="date" class="form-control mt-1 hotelStayEndDate" id="hotelStayEndDateMain">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayCostMain">Hotel Stay Cost</label>
+              <input type="number" class="form-control mt-1 hotelStayEndDate" id="hotelStayCostMain" readonly value="100000">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayHotel">Hotel Stay Hotel Name Select</label>
+              <select class="form-select" aria-label="Default select example" id="hotelStayHotel">
+                <option selected value="">Select package</option>
+                <option value="1">Cinnamon Bay</option>
+                <option value="2">Bentota Beach</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayHotelId">Hotel Stay Hotel  Id</label>
+              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelId" readonly value="21wrew8f398">
+            </div>
+          </div>
+<!--          /////////////////////////////////////-->
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayHotelPackage">Hotel Stay Hotel Package Select</label>
+              <select class="form-select" aria-label="Default select example" id="hotelStayHotelPackage">
+                <option selected value="">Select package</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayHotelPackageId">Hotel Stay Hotel Package Id</label>
+              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageId" readonly value="21uf78f398">
+            </div>
+          </div>
+          <div class="col col-md-12">
+            <button id="addHotelStay" class="btn btn-primary col-lg-2 col-md-3 col-3 m-3">Add Hotel Stay</button>
+            <button id="resetHotelStays" class="btn btn-success col-lg-2 col-md-3 col-3 m-3">Reset Hotel Stays</button>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="hotelStays">
+
+      </div>
+    </div>
+  </div>
+  <div id="hotels">
+    <div class="container">
+      <div class="row">
+        <h1 class="main-color mt-5 mb-5">Hotels</h1>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <input type="text" class="form-control" id="search" placeholder="Search hotels">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="hotelsContainer" class="container  border-black">
+      </div>
+    </div>
+  </div>
+  <div id="vehicles">
+    <h1>vehicles</h1>
+  </div>
+  <div id="guides">
+    <h1>guides</h1>
+  </div>
+</main>
+<script src="./lib/bootstrap-5.3.2-dist/js/bootstrap.min.js"></script>
+<script src="./lib/Jquery.js"></script>
+<script type="module" src="./main.js"></script>
+</body>
+</html>

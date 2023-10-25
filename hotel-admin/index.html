@@ -30,13 +30,14 @@
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
         <div class="form-group">
           <label for="hotelName">Name</label>
-          <input type="text" class="form-control mt-1" id="hotelName" placeholder="Enter hotel name" required>
+          <input type="text" class="field form-control mt-1" id="hotelName" placeholder="Enter hotel name" required>
+          <div class="invalid-feedback">Invalid hotel name.</div>
         </div>
       </div>
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4 ">
         <div class="form-group mt-1">
           <label for="hotelCategory">Select Hotel Category:</label>
-          <select class="form-select" id="hotelCategory">
+          <select class="field form-select" id="hotelCategory">
             <option value="">Select a category</option>
             <option value="ONE_STAR">One Star</option>
             <option value="TWO_STAR">Two Star</option>
@@ -44,6 +45,7 @@
             <option value="FOUR_STAR">Four Star</option>
             <option value="FIVE_STAR">Five Star</option>
           </select>
+          <div class="invalid-feedback">Select a Category</div>
         </div>
       </div>
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
@@ -96,7 +98,7 @@
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
         <div class="form-group">
           <label for="hotelRemarks">Hotel Remarks</label>
-          <input type="number" class="form-control mt-1" id="hotelRemarks">
+          <input type="text" class="form-control mt-1" id="hotelRemarks">
         </div>
       </div>
     </div>
@@ -153,6 +155,28 @@
     </div>
   </div>
 </div>
+<!--update alert-->
+<div class="modal fade" id="updateConfirmationModal" tabindex="-1" role="dialog"
+     aria-labelledby="updateConfirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateConfirmationModalLabel">Confirm Update</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to update this hotel?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmUpdateButton">Confirm Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="./lib/Jquery.js"></script>
 <script src="./lib/bootstrap-5.3.2-dist/js/bootstrap.min.js"></script>
 <script type="module" src="./model/HotelDto.js"></script>

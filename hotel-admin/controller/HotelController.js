@@ -13,7 +13,7 @@ export class HotelController {
         $('#updateBtn').click(this.updateHotel.bind(this));
         $('#clearFieldBtn').click(this.clearFields.bind(this));
         $('#deleteImageYes').click(this.deleteImage.bind(this));
-
+        $(".field").on("keyup",this.field.bind(this));
         this.hotelNameElement = $('#hotelName');
         this.hotelIdElement = $('#hotelId');
         this.hotelRemarksElement = $('#hotelRemarks');
@@ -30,10 +30,20 @@ export class HotelController {
         this.selectedImageId = null;
         this.selectedHotel = null;
     }
+    field(e){
+        console.log('typed');
+        console.log(e.target.id);
+        const hotelName = this.hotelNameElement.val();
+        const hotelNameRegex = /^[\s\S]+$/;
+        if (!hotelNameRegex.test(hotelName)) {
+            this.hotelNameElement.addClass('is-invalid');
+            return;
+        }
+        this.hotelNameElement.removeClass('is-invalid');
 
+    }
     getImageId(e) {
         this.selectedImageId = e.target.id;
-        console.log(e);
     }
 
     deleteImage() {
@@ -98,7 +108,6 @@ export class HotelController {
         <button class="col btn btn-danger delete-button">Delete</button>
       </div>
     `);
-
             row.find(".delete-button").on("click", function () {
                 row.remove();
             });
@@ -109,6 +118,17 @@ export class HotelController {
 
 
     createHotel() {
+        const hotelId = this.hotelIdElement.val();
+        if(!this.allFieldsAreValidated()){
+            alert('fields are null');
+            return;
+        }
+        const emptyOrWhiteSpaceRegex = /^[\s]*$/;
+        if (!emptyOrWhiteSpaceRegex.test(hotelId)) {
+            alert("you should update");
+            return;
+        }
+
         const hotelName = this.hotelNameElement.val();
         const hotelCategory = this.hotelCategoryElement.val();
         const location = this.hotelLocationElement.val();
@@ -157,7 +177,7 @@ export class HotelController {
             formData.append("hotelImagesRequest", this.hotelImageInputsElement[0].files[i]);
         }
         console.log(hotelDto)
-        $.ajax({
+     /*   $.ajax({
             type: "POST",
             url: "http://localhost:8092/hotelservice/api/v1/hotels",
             data: formData,
@@ -169,74 +189,22 @@ export class HotelController {
             error: (error) => {
                 console.error("Error saving guide: " + error.responseText);
             }
-        });
+        });*/
     }
 
     updateHotel() {
-        const hotelName = this.hotelNameElement.val();
-        const hotelId = this.hotelIdElement.val();
-        const hotelCategory = this.hotelCategoryElement.val();
-        const location = this.hotelLocationElement.val();
-        const email = this.hotelEmailElement.val();
-        const isPetsAllowed = this.hotelPetsAllowedElement.val();
-        const hotelContact = this.hotelContactElement.val();
-        const isCriteriaFree = this.hotelIsCancelledElement.val();
-        const hotelRemarks = this.hotelRemarksElement.val();
-        let hotelCancellationCost = 0;
-        if (isCriteriaFree !== null) {
-            hotelCancellationCost = this.hotelCancellationCostElement.val();
+        const hotelId = this.hotelIdElement.val()
+        if (hotelId === null || hotelId === undefined || hotelId === '') {
+            alert("pick a hotel first");
+            return;
         }
 
-        const packageContainers = document.querySelectorAll('#packageContainer .row');
-        const packages = [];
-
-        packageContainers.forEach((container) => {
-            const packageId = container.querySelector('#hotelPackageId').value;
-            const packageType = container.querySelector('#hotelPackageType').value;
-            const roomType = container.querySelector('#hotelPackageRoomType').value;
-            const packagePrice = container.querySelector('#hotelPackagePrice').value;
-
-            const hotelPackage = new HotelPackageDTO(packageId, packageType, roomType, packagePrice);
-            packages.push(hotelPackage);
+        $('#updateConfirmationModal').modal('show');
+        $('#confirmUpdateButton').click(() => {
+            $('#updateConfirmationModal').modal('hide');
+            this.performUpdate();
         });
 
-
-        const hotelDto = new HotelDTO(
-            hotelName,
-            hotelCategory,
-            location,
-            email,
-            hotelContact,
-            isPetsAllowed,
-            hotelCancellationCost,
-            isCriteriaFree,
-            packages,
-            hotelRemarks
-        );
-        const formData = new FormData();
-        const jsonDTO = JSON.stringify(hotelDto);
-        const blob = new Blob([jsonDTO], {type: 'application/json'});
-
-        formData.append("hotelDTO", blob);
-        for (let i = 0; i < this.hotelImageInputsElement[0].files.length; i++) {
-            formData.append("hotelImagesRequest", this.hotelImageInputsElement[0].files[i]);
-        }
-        console.log(hotelDto)
-        $.ajax({
-            type: "PUT",
-            url: "http://localhost:8092/hotelservice/api/v1/hotels" + "/" + hotelId,
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: () => {
-                console.log("Guide updated successfully. User ID: ");
-                this.getAllHotels();
-                this.clearFields();
-            },
-            error: (error) => {
-                console.error("Error saving guide: " + error.responseText);
-            }
-        });
     }
 
     getAllHotels() {
@@ -363,5 +331,130 @@ export class HotelController {
                 </div>`;
             hotelsContainer.appendChild(hotelCard);
         });
+    }
+
+    performUpdate() {
+        const hotelName = this.hotelNameElement.val();
+        const hotelId = this.hotelIdElement.val();
+        const hotelCategory = this.hotelCategoryElement.val();
+        const location = this.hotelLocationElement.val();
+        const email = this.hotelEmailElement.val();
+        const isPetsAllowed = this.hotelPetsAllowedElement.val();
+        const hotelContact = this.hotelContactElement.val();
+        const isCriteriaFree = this.hotelIsCancelledElement.val();
+        const hotelRemarks = this.hotelRemarksElement.val();
+        let hotelCancellationCost = 0;
+        if (isCriteriaFree !== null) {
+            hotelCancellationCost = this.hotelCancellationCostElement.val();
+        }
+
+        const packageContainers = document.querySelectorAll('#packageContainer .row');
+        const packages = [];
+
+        packageContainers.forEach((container) => {
+            const packageId = container.querySelector('#hotelPackageId').value;
+            const packageType = container.querySelector('#hotelPackageType').value;
+            const roomType = container.querySelector('#hotelPackageRoomType').value;
+            const packagePrice = container.querySelector('#hotelPackagePrice').value;
+
+            const hotelPackage = new HotelPackageDTO(packageId, packageType, roomType, packagePrice);
+            packages.push(hotelPackage);
+        });
+
+
+        const hotelDto = new HotelDTO(
+            hotelName,
+            hotelCategory,
+            location,
+            email,
+            hotelContact,
+            isPetsAllowed,
+            hotelCancellationCost,
+            isCriteriaFree,
+            packages,
+            hotelRemarks
+        );
+        const formData = new FormData();
+        const jsonDTO = JSON.stringify(hotelDto);
+        const blob = new Blob([jsonDTO], {type: 'application/json'});
+
+        formData.append("hotelDTO", blob);
+        for (let i = 0; i < this.hotelImageInputsElement[0].files.length; i++) {
+            formData.append("hotelImagesRequest", this.hotelImageInputsElement[0].files[i]);
+        }
+        console.log(hotelDto)
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8092/hotelservice/api/v1/hotels" + "/" + hotelId,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: () => {
+                console.log("Guide updated successfully. User ID: ");
+                this.getAllHotels();
+                this.clearFields();
+            },
+            error: (error) => {
+                console.error("Error saving guide: " + error.responseText);
+            }
+        });
+    }
+
+    allFieldsAreValidated() {
+        const hotelName = this.hotelNameElement.val();
+        const hotelCategory = this.hotelCategoryElement.val();
+        const location = this.hotelLocationElement.val();
+        const email = this.hotelEmailElement.val();
+        const isPetsAllowed = this.hotelPetsAllowedElement.val();
+        const hotelContact = this.hotelContactElement.val();
+        const isCriteriaFree = this.hotelIsCancelledElement.val();
+        const hotelRemarks = this.hotelRemarksElement.val();
+
+        const hotelNameRegex = /^[\s\S]+$/; // Not empty
+        const categoryRegex = /^[\s\S]+$/; // Not empty
+        const locationRegex = /^[\s\S]+$/; // Not empty
+        const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // Basic email format
+        const petsAllowedRegex = /^[\s\S]+$/; // Not empty
+        const contactRegex = /^[\s\S]+$/; // Not empty
+        const criteriaFreeRegex = /^[\s\S]+$/; // Not empty
+
+        if (!hotelNameRegex.test(hotelName)) {
+            this.hotelNameElement.addClass('is-invalid');
+            return false;
+        }
+
+        if (!categoryRegex.test(hotelCategory)) {
+            console.log('Invalid hotel category');
+            this.hotelCategoryElement.addClass('is-invalid');
+            return false;
+        }
+
+        if (!locationRegex.test(location)) {
+            console.log('Invalid location');
+            return false;
+        }
+
+        if (!emailRegex.test(email)) {
+            console.log('Invalid email');
+            return false;
+        }
+
+        if (!petsAllowedRegex.test(isPetsAllowed)) {
+            console.log('Invalid pets allowed field');
+            return false;
+        }
+
+        if (!contactRegex.test(hotelContact)) {
+            console.log('Invalid hotel contact');
+            return false;
+        }
+
+        if (!criteriaFreeRegex.test(isCriteriaFree)) {
+            console.log('Invalid criteria free field');
+            return false;
+        }
+
+        return true;
+
     }
 }

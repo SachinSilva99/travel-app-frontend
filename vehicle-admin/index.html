@@ -164,45 +164,47 @@
       <div class="row">
         <button id="addBtn" type="submit" class="btn btn-primary col-2 mt-4 m-2 "> Add</button>
         <button id="updateBtn" type="submit" class="btn btn-success col-2 mt-4 m-2 "> Update</button>
-        <button id="clearFieldBtn" type="submit" class="btn btn-dark col-2 mt-4 m-2 "> Clear Fields</button>
+        <button id="clearFieldBtn"  class="btn btn-dark col-2 mt-4 m-2 "> Clear Fields</button>
       </div>
       <!--      //showing vehicle images------------------------------->
       <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleMainPicSection">
+        <div class="imgShow col-lg-3 col-md-6 col-sm-12 border col-sm-6 m-2 col-12" id="vehicleMainPicSection">
           <div>
-            <h4 class="mt-3">Vehicle Main Image</h4>
-            <img id="vehicleMainPic" class="col-12 imgSize" src="" alt="img">
+            <h5 class="text-center mt-3">Vehicle Main Image</h5>
+            <img id="vehicleMainPic" class="col-12 imgSize m-1 mb-2" src="" alt="img">
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleFrontPicSection">
+        <div class="imgShow col-lg-3 col-md-6 col-sm-12 border col-sm-6 m-2 col-12" id="vehicleFrontPicSection">
           <div>
-            <h4 class="mt-3">Vehicle Image Front</h4>
-            <img id="vehicleFrontPic" class="col-12 imgSize" src="" alt="img">
+            <h5 class="text-center mt-3">Vehicle Image Front</h5>
+            <img id="vehicleFrontPic" class="col-12 imgSize m-1 mb-2" src="" alt="img">
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleBackPicSection">
+        <div class="imgShow col-lg-3 col-md-6 col-sm-12 border col-sm-6 m-2 col-12" id="vehicleBackPicSection">
           <div>
-            <h4 class="mt-3">Vehicle Image Back</h4>
-            <img id="vehicleBackPic" class="col-12 imgSize" src="" alt="img">
+            <h5 class="text-center mt-3">Vehicle Image Back</h5>
+            <img id="vehicleBackPic" class="col-12 imgSize m-1 mb-2" src="" alt="img">
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleBackInteriorPicSection">
+        <div class="imgShow col-lg-3 col-md-6 col-sm-12 border col-sm-6 m-2 col-12" id="vehicleBackInteriorPicSection">
           <div>
-            <h4 class="mt-3">Vehicle Image Back Interior</h4>
-            <img id="vehicleBackInteriorPic" class="col-12 imgSize" src="" alt="img">
+            <h5 class="text-center mt-3">Vehicle Image Back Interior</h5>
+            <img id="vehicleBackInteriorPic" class="col-12 imgSize m-1 mb-2" src="" alt="img">
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="vehicleFrontInteriorPicSection">
+        <div class="imgShow col-lg-3 col-md-6 col-sm-12 border col-sm-6 m-2 col-12" id="vehicleFrontInteriorPicSection">
           <div>
-            <h4 class="mt-3">Vehicle Image Front</h4>
-            <img id="vehicleFrontInteriorPic" class="col-12 imgSize" src="" alt="img">
+            <h5 class="text-center mt-3">Vehicle Image Back Interior</h5>
+            <img id="vehicleFrontInteriorPic" class="col-12 imgSize m-1 mb-2" src="" alt="img">
           </div>
         </div>
       </div>
 
     </div>
   </form>
-  <div class="row">
+
+  <hr>
+  <div class="row mb-3">
     <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
       <div class="form-group">
         <label for="searchVehicle">Search Vehicle</label>
@@ -210,11 +212,13 @@
       </div>
     </div>
   </div>
+  <h3>All Vehicles</h3>
   <div class="container">
     <div class="row" id="vehiclesContainer"></div>
   </div>
 
   <!--  modal delete----------------------------------------------->
+  <!--  image delete modal delete----------------------------------------------->
   <div class="modal" tabindex="-1" role="dialog" id="modal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -222,10 +226,10 @@
           <h1>Caution!</h1>
         </div>
         <div class="modal-body">
-          <p>Do you want to delete?</p>
+          <p>Do you want to delete vehicle?</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="deleteYes" data-bs-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-primary" id="deleteYesBtn" data-bs-dismiss="modal">Yes</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
         </div>
       </div>
@@ -233,7 +237,6 @@
   </div>
 </div>
 <script src="./lib/bootstrap-5.3.2-dist/js/bootstrap.min.js"></script>
-
 <script src="./lib/Jquery.js"></script>
 <script type="module" src="main.js">
 </script>

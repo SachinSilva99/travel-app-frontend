@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,300;1,100&family=Roboto&family=Roboto+Condensed:wght@300&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.main-color {
+    color: #96C2DB;
+}
+
+.main-color-bg {
+    background-color: #96C2DB !important;
+}
+
+a {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.superNav {
+    font-size: 13px;
+}
+
+.form-control {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+
+@media screen and (max-width: 540px) {
+    .centerOnMobile {
+        text-align: center
+    }
+}
+
+.hotelImage {
+    width: 100%;
+    height: 100%;
+}

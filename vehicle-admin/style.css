@@ -1,11 +1,10 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,300;1,100&family=Roboto&display=swap');
 
-body{
-    font-family: 'Roboto', sans-serif!important;
+body {
+    font-family: 'Roboto', sans-serif !important;
 }
 
-#vehicleMainPicSection, #vehicleFrontPicSection,#vehicleBackPicSection,#vehicleBackInteriorPicSection, #vehicleFrontInteriorPicSection {
+#vehicleMainPicSection, #vehicleFrontPicSection, #vehicleBackPicSection, #vehicleBackInteriorPicSection, #vehicleFrontInteriorPicSection {
     display: none;
 }
 
@@ -20,15 +19,31 @@ body{
 }
 
 .card:hover {
-    background-color: #96C2DB;
+    background-color: #bfdaea;
 }
 
 .imgSize {
-    width: 250px;
-    height: 200px;
+    min-width: 150px;
+    min-height: 100px;
+    max-width: 300px;
+    max-height: 200px;
     object-fit: contain;
 }
 
 .custom-text-color {
     color: #96C2DB;
+}
+
+.imgShow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5%;
+    /*background-color: #E5EDF1;*/
+    border: 1px solid #E5EDF1;
+}
+
+
+.imgShow {
+    transition: background-color .5s ease;
 }

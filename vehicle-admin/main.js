@@ -1,4 +1,4 @@
-import {VehicleController} from "./controller/GuideController.js";
+import {VehicleController} from "./controller/VehicleController.js";
 
 new VehicleController();
 

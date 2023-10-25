@@ -43,17 +43,14 @@
       </div>
       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
         <div class="form-group mt-1">
-          <label class="label">Gender</label>
-          <div>
-            <label class="radio-container m-r-45">Male
-              <input type="radio" checked="checked" name="gender" id="male">
-              <span class="checkmark"></span>
-            </label>
-            <label class="radio-container">Female
-              <input type="radio" name="gender" id="female">
-              <span class="checkmark"></span>
-            </label>
-          </div>
+          <label for="guideGender">Select Gender:</label>
+          <select class="field form-select" id="guideGender">
+            <option value="">Select Gender</option>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <div class="invalid-feedback">Select a Category</div>
         </div>
       </div>
 
@@ -100,11 +97,10 @@
       <div class="row">
         <button id="addBtn" type="submit" class="btn btn-primary col-2 mt-4 m-2 "> Add</button>
         <button id="updateBtn" type="submit" class="btn btn-success col-2 mt-4 m-2 "> Update</button>
-        <button id="clearFieldBtn" type="submit" class="btn btn-dark col-2 mt-4 m-2 "> Clear Fields</button>
+        <button id="clearFieldBtn" class="btn btn-dark col-2 mt-4 m-2 "> Clear Fields</button>
       </div>
-      <!--      //showing guide id------------------------------->
+      <!--      //showing guide images------------------------------->
       <div class="row">
-
         <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="guideImageSection">
           <div>
             <h3 class="mt-3">Profile Image</h3>
@@ -117,15 +113,12 @@
             <img id="imageIdFront" class="col-12 imgSize" src="" alt="img">
           </div>
         </div>
-
         <div class="col-lg-3 col-md-4 col-sm-12 border m-3" id="imageIdBackSection">
           <div>
             <h3 class="mt-3">Image Id Back</h3>
             <img id="imageIdBack" class="col-12 imgSize" src="" alt="img">
           </div>
         </div>
-
-
       </div>
 
     </div>
