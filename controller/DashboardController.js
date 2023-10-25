@@ -4,6 +4,8 @@ export class DashboardController {
 
 
     constructor() {
+        this.hotelStayDtos = [];
+        this.currentEndDate = null;
         this.tripStartDateEl = $("#tripStartDate");
         $(document).ready(this.documentOnReady.bind(this));
 
@@ -39,7 +41,7 @@ export class DashboardController {
         this.hotelStayIndex = 0;
         this.hotelStayStartDateMainEl = $(`#hotelStayStartDateMain`);
         this.hotelStayEndDateMainEl = $(`#hotelStayEndDateMain`);
-        this.hotelStayDtos = [];
+
 
     }
 
@@ -68,20 +70,21 @@ export class DashboardController {
             const timeDiff = Math.abs(endDate - startDate);
             const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
             this.tripNoDays = diffDays;
+            console.log('dif', diffDays)
             this.tripNoDaysRemaining = diffDays;
             if (isNaN(timeDiff)) {
                 return;
             }
-            this.hotelStayStartDateMainEl.attr("min", startDate.toISOString().split('T')[0]);
-            this.hotelStayStartDateMainEl.attr("max", endDate.toISOString().split('T')[0]);
             this.hotelStayEndDateMainEl.attr("min", startDate.toISOString().split('T')[0]);
             this.hotelStayEndDateMainEl.attr("max", endDate.toISOString().split('T')[0]);
             this.resultEl.text(`Trip Number of days: ${diffDays}`);
+            console.log('days ' + this.tripNoDaysRemaining);
             this.noOfDaysRemainingEl.html(this.tripNoDaysRemaining);
             this.addHotelStayBtnEl.prop("disabled", false);
+            this.hotelStayStartDateMainEl.val(this.tripStartDateEl.val());
             this.hotelStayStartDateMainEl.prop('disabled', true);
-            const currentEndDate = this.hotelStayEndDateMainEl.val();
-            this.hotelStayStartDateMainEl.val(currentEndDate);
+            this.currentEndDate = this.tripEndDateEl.val();
+            console.log(this.currentEndDate)
 
         } else {
             this.resultEl.text(`Trip Number of days: ${0}`);
@@ -92,23 +95,40 @@ export class DashboardController {
 
 
     addHotelStay() {
-        this.hotelStayStartDateMainEl.prop('disabled', true);
-        const currentEndDate = this.hotelStayEndDateMainEl.val();
-        const startDate = this.hotelStayStartDateMainEl.val(currentEndDate);
-        const endDate = this.hotelStayEndDateMainEl.val();
-        const timeDiff = Math.abs(endDate - startDate);
-        if (isNaN(timeDiff)) {
+        if (this.tripNoDaysRemaining === 0) {
+            alert('days are full')
             return;
         }
-        const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
-        this.tripNoDays = diffDays;
+        const startDate = new Date(this.currentEndDate);
+        const endDate = new Date(this.hotelStayEndDateMainEl.val());
+        const timeDiff = Math.abs(endDate - startDate);
+        const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
         this.tripNoDaysRemaining -= diffDays;
-
         const hotelStayDto = new HotelStayDto(startDate, endDate);
         this.hotelStayDtos.push(hotelStayDto);
-        this.resultEl.text(`Trip Number of days: ${this.tripNoDaysRemaining}`);
         this.loadHotelPackages();
+        this.noOfDaysRemainingEl.html(this.tripNoDaysRemaining);
+        this.currentEndDate = endDate;
+        //setting the starting date of new hotel stay with selected previous date
+        const currentDate = new Date(endDate);
+        currentDate.setDate(currentDate.getDate() + 1);
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const formattedDate = year + '-' + month + '-' + day;
+        this.hotelStayStartDateMainEl.val(formattedDate);
+        this.hotelStayStartDateMainEl.prop('disabled', true);
 
+
+        //setting hotel end date
+        this.hotelStayEndDateMainEl.attr("min", currentDate.toISOString().split('T')[0]);
+        this.hotelStayEndDateMainEl.attr("max", new Date(this.tripEndDateEl.val()).toISOString().split('T')[0]);
+        if (this.tripNoDaysRemaining === 0) {
+            this.addHotelStayBtnEl.prop('disabled', true);
+            alert('days are full')
+        } else {
+            this.addHotelStayBtnEl.prop('disabled', false);
+        }
     }
 
     documentOnReady() {
