@@ -1,10 +1,15 @@
 import {HotelStayDto} from "../model/HotelStayDto.js";
+import {StandardResponse} from "../hotel-admin/model/StandardResponse.js";
 
 export class DashboardController {
 
 
+
     constructor() {
         this.hotelStayDtos = [];
+        this.hotels = [];
+        this.normalHotelApiUrl = "http://localhost:8092/hotelservice/api/v1/getAll";
+        this.getAllHotels();
         this.currentEndDate = null;
         this.tripStartDateEl = $("#tripStartDate");
         $(document).ready(this.documentOnReady.bind(this));
@@ -32,23 +37,49 @@ export class DashboardController {
         this.resultEl = $("#result");
         this.tripStartDateEl.on("change", this.updateNumberOfDays.bind(this));
         this.tripEndDateEl.on("change", this.updateNumberOfDays.bind(this));
+        this.hotelStayHotelEl = $(`#hotelStayHotel`);
+        this.hotelStayHotelEl.on('change', this.hotelStayHotelIdElOnChange.bind(this));
         this.packageSelectEl = $("#package-select");
         this.packageSelectEl.on('change', this.PackageSelect.bind(this));
         this.packageDetailsEl = $("#package-details");
         this.addHotelStayBtnEl = $("#addHotelStay");
         this.addHotelStayBtnEl.on("click", this.addHotelStay.bind(this));
         this.addHotelStayBtnEl.prop("disabled", true);
-        this.hotelStayIndex = 0;
         this.hotelStayStartDateMainEl = $(`#hotelStayStartDateMain`);
         this.hotelStayEndDateMainEl = $(`#hotelStayEndDateMain`);
-
+        this.hotelStayHotelIdEl = $(`#hotelStayHotelId`);
 
     }
 
+    hotelStayHotelIdElOnChange(e) {
+        const selectedOption = this.hotelStayHotelEl.find('option:selected');
+        const selectedOptionId = selectedOption.attr('id');
+        console.log('Selected Option ID: ' + selectedOptionId);
+        this.hotelStayHotelIdEl.val(selectedOptionId)
+    }
+
     PackageSelect() {
-        console.log('works')
         const selectedPackage = this.packageSelectEl.val();
+        this.getAllHotels();
         this.packageDetailsEl.html(this.packageDetailsMap[selectedPackage] || "");
+        if (selectedPackage === 'REGULAR') {
+            console.log('regular')
+            this.hotels = this.hotels.filter(hotel => hotel.hotelCategory === 'TWO_STAR' || hotel.hotelCategory === "THREE_STAR");
+
+        }
+        if (selectedPackage === 'SUPER_LUXURY') {
+            this.hotels = this.hotels.filter(hotel => hotel.hotelCategory === 'FIVE_STAR');
+        }
+        this.hotels.forEach(hotel => {
+            const option = $("<option></option>")
+                .attr("value", hotel.hotelName)
+                .attr("id", hotel.hotelId)
+                .text(hotel.hotelName);
+            console.log(hotel.hotelId)
+            this.hotelStayHotelEl.append(option);
+            return hotel;
+        });
+
     }
 
     updateNumberOfDays() {
@@ -75,6 +106,8 @@ export class DashboardController {
             if (isNaN(timeDiff)) {
                 return;
             }
+
+
             this.hotelStayEndDateMainEl.attr("min", startDate.toISOString().split('T')[0]);
             this.hotelStayEndDateMainEl.attr("max", endDate.toISOString().split('T')[0]);
             this.resultEl.text(`Trip Number of days: ${diffDays}`);
@@ -159,6 +192,22 @@ export class DashboardController {
                     </div>
                 `;
             packageInfoElement.html(hotelStay);
+        });
+    }
+
+    getAllHotels() {
+        $.ajax({
+            url: this.normalHotelApiUrl,
+            type: "GET",
+            dataType: "json",
+            success: (res) => {
+                const standardResponse = new StandardResponse(res.code, res.msg, res.data);
+                this.hotels = standardResponse.data;
+                console.log(this.hotels)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error: " + errorThrown);
+            }
         });
     }
 }

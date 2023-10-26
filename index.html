@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -153,16 +152,14 @@
             <div class="form-group">
               <label for="hotelStayHotel">Hotel Stay Hotel Name Select</label>
               <select class="form-select" aria-label="Default select example" id="hotelStayHotel">
-                <option selected value="">Select package</option>
-                <option value="1">Cinnamon Bay</option>
-                <option value="2">Bentota Beach</option>
+                <option selected value="">Select hotel</option>
               </select>
             </div>
           </div>
           <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
             <div class="form-group">
               <label for="hotelStayHotelId">Hotel Stay Hotel  Id</label>
-              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelId" readonly value="21wrew8f398">
+              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelId" readonly>
             </div>
           </div>
 <!--          /////////////////////////////////////-->
@@ -183,9 +180,21 @@
               <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageId" readonly value="21uf78f398">
             </div>
           </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayHotelPackageType">Hotel Stay Hotel Package Type</label>
+              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageType" readonly value="Full board">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayHotelPackageRoomType">Hotel Stay Hotel Room Type</label>
+              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageRoomType" readonly value="AC_Luxury_Room_Double">
+            </div>
+          </div>
           <div class="col col-md-12">
             <button id="addHotelStay" class="btn btn-primary col-lg-2 col-md-3 col-3 m-3">Add Hotel Stay</button>
-            <button id="resetHotelStays" class="btn btn-success col-lg-2 col-md-3 col-3 m-3">Reset Hotel Stays</button>
+            <button id="resetHotelStays" class="btn btn-dark col-lg-2 col-md-3 col-3 m-3">Reset Hotel Stays</button>
           </div>
         </div>
       </div>
