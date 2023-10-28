@@ -41,7 +41,7 @@ export class HotelController {
         window.initMap = () => {
             const myLatlng = {lat: 6.5788759736, lng: 79.9665327316};
             const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 4,
+                zoom: 10,
                 center: myLatlng,
             });
             let infoWindow = new google.maps.InfoWindow({

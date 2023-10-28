@@ -9,6 +9,7 @@ export class HotelsController {
 
     }
 
+
     clickOnHotel(e) {
         const selectedHotelId = e.target.closest('.hotel').id;
         const selectedPackage = e.target.value;
