@@ -27,6 +27,8 @@ imageInput.addEventListener('change', displayImages);
 
 
 
+
+
 /*
 const add = document.getElementById("addBtn");
 add.addEventListener("click", function () {

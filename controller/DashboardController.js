@@ -4,7 +4,6 @@ import {StandardResponse} from "../hotel-admin/model/StandardResponse.js";
 export class DashboardController {
 
 
-
     constructor() {
         this.hotelStayDtos = [];
         this.hotels = [];
@@ -100,13 +99,14 @@ export class DashboardController {
         if (startDate && endDate && startDate <= endDate) {
             const timeDiff = Math.abs(endDate - startDate);
             const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
-            this.tripNoDays = diffDays;
+
             console.log('dif', diffDays)
-            this.tripNoDaysRemaining = diffDays;
+
             if (isNaN(timeDiff)) {
                 return;
             }
-
+            this.tripNoDays = diffDays;
+            this.tripNoDaysRemaining = diffDays;
 
             this.hotelStayEndDateMainEl.attr("min", startDate.toISOString().split('T')[0]);
             this.hotelStayEndDateMainEl.attr("max", endDate.toISOString().split('T')[0]);
@@ -116,7 +116,7 @@ export class DashboardController {
             this.addHotelStayBtnEl.prop("disabled", false);
             this.hotelStayStartDateMainEl.val(this.tripStartDateEl.val());
             this.hotelStayStartDateMainEl.prop('disabled', true);
-            this.currentEndDate = this.tripEndDateEl.val();
+            this.currentEndDate = this.tripStartDate;
             console.log(this.currentEndDate)
 
         } else {
@@ -128,15 +128,25 @@ export class DashboardController {
 
 
     addHotelStay() {
+        console.log('remaining days', this.tripNoDaysRemaining)
         if (this.tripNoDaysRemaining === 0) {
             alert('days are full')
             return;
         }
         const startDate = new Date(this.currentEndDate);
         const endDate = new Date(this.hotelStayEndDateMainEl.val());
-        const timeDiff = Math.abs(endDate - startDate);
-        const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-        this.tripNoDaysRemaining -= diffDays;
+        console.log('ss start date', startDate);
+        console.log('ss end date', endDate);
+        const timeDiff = endDate - startDate; // Swap the order here
+
+        let daysDifference = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        if (daysDifference === 0) {
+            daysDifference = 1;
+            this.tripNoDaysRemaining -= 1;
+        } else {
+            this.tripNoDaysRemaining -= daysDifference;
+        }
+        console.log(daysDifference);
         const hotelStayDto = new HotelStayDto(startDate, endDate);
         this.hotelStayDtos.push(hotelStayDto);
         this.loadHotelPackages();

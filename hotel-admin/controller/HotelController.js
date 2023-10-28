@@ -7,13 +7,17 @@ export class HotelController {
     constructor() {
         this.hotelApi = "http://localhost:8092/hotelservice/api/v1/hotels";
         this.getAllHotels();
+        this.lat = null;
+        this.lng = null;
+
         this.hotels = [];
+        this.setUpMap();
         $(document).ready(this.handleHotelPackage.bind(this));
         $('#addBtn').click(this.createHotel.bind(this));
         $('#updateBtn').click(this.updateHotel.bind(this));
         $('#clearFieldBtn').click(this.clearFields.bind(this));
         $('#deleteImageYes').click(this.deleteImage.bind(this));
-        $(".field").on("keyup",this.field.bind(this));
+        $(".field").on("keyup", this.field.bind(this));
         this.hotelNameElement = $('#hotelName');
         this.hotelIdElement = $('#hotelId');
         this.hotelRemarksElement = $('#hotelRemarks');
@@ -25,12 +29,50 @@ export class HotelController {
         this.hotelIsCancelledElement = $('#isHotelCancellationCriteriaFree');
         this.hotelImageInputsElement = $('#imageInput');
         this.hotelContactElement = $('#hotelContact');
+        this.hotelLocationLatElement = $('#hotelLocationLat');
+        this.hotelLocationLngElement = $('#hotelLocationLng');
         $('#hotelsContainer').on('click', '.card', this.clickOnCard.bind(this));
         $('#imageDisplay').on('click', '.card', this.getImageId.bind(this));
         this.selectedImageId = null;
         this.selectedHotel = null;
     }
-    field(e){
+
+    setUpMap() {
+        window.initMap = () => {
+            const myLatlng = {lat: 6.5788759736, lng: 79.9665327316};
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: myLatlng,
+            });
+            let infoWindow = new google.maps.InfoWindow({
+                content: "Click the map to get Lat/Lng!",
+                position: myLatlng,
+            });
+
+            infoWindow.open(map);
+            map.addListener("click", (mapsMouseEvent) => {
+                infoWindow.close();
+                // Create a new InfoWindow.
+                infoWindow = new google.maps.InfoWindow({
+                    position: mapsMouseEvent.latLng,
+                });
+                const data = mapsMouseEvent.latLng.toJSON();
+                this.lat = data.lat;
+                this.lng = data.lng;
+                this.hotelLocationLatElement.val(this.lat);
+                this.hotelLocationLngElement.val(this.lng);
+                console.log(this.lng);
+                infoWindow.setContent(
+                    JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+                );
+                infoWindow.open(map);
+            });
+
+        };
+
+    }
+
+    field(e) {
         console.log('typed');
         console.log(e.target.id);
         const hotelName = this.hotelNameElement.val();
@@ -42,6 +84,7 @@ export class HotelController {
         this.hotelNameElement.removeClass('is-invalid');
 
     }
+
     getImageId(e) {
         this.selectedImageId = e.target.id;
     }
@@ -119,7 +162,7 @@ export class HotelController {
 
     createHotel() {
         const hotelId = this.hotelIdElement.val();
-        if(!this.allFieldsAreValidated()){
+        if (!this.allFieldsAreValidated()) {
             alert('fields are null');
             return;
         }
@@ -137,6 +180,8 @@ export class HotelController {
         const hotelContact = this.hotelContactElement.val();
         const isCriteriaFree = this.hotelIsCancelledElement.val();
         const hotelRemarks = this.hotelRemarksElement.val();
+        const hotelLocationLat = this.hotelLocationLatElement.val();
+        const hotelLocationLng = this.hotelLocationLngElement.val();
         let hotelCancellationCost = 0;
         if (isCriteriaFree !== null) {
             hotelCancellationCost = this.hotelCancellationCostElement.val();
@@ -166,7 +211,9 @@ export class HotelController {
             hotelCancellationCost,
             isCriteriaFree,
             packages,
-            hotelRemarks
+            hotelRemarks,
+            hotelLocationLat,
+            hotelLocationLng
         );
         const formData = new FormData();
         const jsonDTO = JSON.stringify(hotelDto);
@@ -177,19 +224,21 @@ export class HotelController {
             formData.append("hotelImagesRequest", this.hotelImageInputsElement[0].files[i]);
         }
         console.log(hotelDto)
-     /*   $.ajax({
-            type: "POST",
-            url: "http://localhost:8092/hotelservice/api/v1/hotels",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: (response) => {
-                console.log("Guide saved successfully. User ID: " + response.data);
-            },
-            error: (error) => {
-                console.error("Error saving guide: " + error.responseText);
-            }
-        });*/
+           $.ajax({
+               type: "POST",
+               url: "http://localhost:8092/hotelservice/api/v1/hotels",
+               data: formData,
+               processData: false,
+               contentType: false,
+               success: (response) => {
+                   console.log("Guide saved successfully. User ID: " + response.data);
+                   this.getAllHotels();
+                   this.clearFields();
+               },
+               error: (error) => {
+                   console.error("Error saving guide: " + error.responseText);
+               }
+           });
     }
 
     updateHotel() {
@@ -311,6 +360,8 @@ export class HotelController {
         this.hotelIsCancelledElement.val('true');
         this.hotelRemarksElement.val('');
         this.hotelCancellationCostElement.val(0);
+        this.hotelLocationLatElement.val('');
+        this.hotelLocationLngElement.val('');
     }
 
     loadData(data) {
@@ -343,6 +394,8 @@ export class HotelController {
         const hotelContact = this.hotelContactElement.val();
         const isCriteriaFree = this.hotelIsCancelledElement.val();
         const hotelRemarks = this.hotelRemarksElement.val();
+        const hotelLocationLat = this.hotelLocationLatElement.val();
+        const hotelLocationLng = this.hotelLocationLngElement.val();
         let hotelCancellationCost = 0;
         if (isCriteriaFree !== null) {
             hotelCancellationCost = this.hotelCancellationCostElement.val();
@@ -372,7 +425,9 @@ export class HotelController {
             hotelCancellationCost,
             isCriteriaFree,
             packages,
-            hotelRemarks
+            hotelRemarks,
+            hotelLocationLat,
+            hotelLocationLng
         );
         const formData = new FormData();
         const jsonDTO = JSON.stringify(hotelDto);
@@ -408,6 +463,8 @@ export class HotelController {
         const isPetsAllowed = this.hotelPetsAllowedElement.val();
         const hotelContact = this.hotelContactElement.val();
         const isCriteriaFree = this.hotelIsCancelledElement.val();
+        const hotelLocationLat = this.hotelLocationLatElement.val();
+        const hotelLocationLng = this.hotelLocationLngElement.val();
         const hotelRemarks = this.hotelRemarksElement.val();
 
         const hotelNameRegex = /^[\s\S]+$/; // Not empty
@@ -457,4 +514,6 @@ export class HotelController {
         return true;
 
     }
+
+
 }

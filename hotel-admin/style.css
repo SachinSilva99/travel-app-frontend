@@ -28,3 +28,7 @@ body {
     height: 200px;
     object-fit: contain;
 }
+#map {
+    height: 400px;
+    width:65vw;
+}

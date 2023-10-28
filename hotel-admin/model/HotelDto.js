@@ -9,7 +9,9 @@ export class HotelDTO {
         hotelCancellationCost,
         isHotelCancellationCriteriaFree,
         hotelPackageDTOS,
-        hotelRemarks
+        hotelRemarks,
+        hotelLocationLat,
+        hotelLocationLng
     ) {
         this.hotelId = null;
         this.hotelName = hotelName;
@@ -21,6 +23,8 @@ export class HotelDTO {
         this.isHotelCancellationCriteriaFree = isHotelCancellationCriteriaFree;
         this.hotelCancellationCost = hotelCancellationCost;
         this.hotelRemarks = hotelRemarks;
+        this.hotelLocationLat = hotelLocationLat;
+        this.hotelLocationLng = hotelLocationLng;
         this.hotelImageDTOS = [];
         this.hotelPackageDTOS = hotelPackageDTOS;
     }

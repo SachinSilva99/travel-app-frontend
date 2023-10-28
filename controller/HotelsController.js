@@ -96,7 +96,7 @@ export class HotelsController {
           <h5 class="card-title">${hotel.hotelName}</h5>
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
-              <img class="hotelImage" src="images/34021085.jpg">
+              <img class="hotelImage" src="${`data:image/**;base64,${hotel.hotelImageDTOS.at(0).hotelImgValue}`}">
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
               <img class="hotelImage" src="images/maxresdefault.jpg">

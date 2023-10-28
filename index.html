@@ -82,7 +82,7 @@
   <div id="home">
     <div class="container">
       <div class="row">
-        <div class="col-lg-3 col-md-6 col-12 m-3">
+        <div class="col-lg-3 col-md-6 col-12 m-3 mb-5">
           <p>Select your preferred package</p>
           <select id="package-select" class="form-select" aria-label="Default select example">
             <option value="" selected>Select a Travel Package</option>
@@ -110,14 +110,6 @@
             <input type="date" class="form-control mt-1" id="tripEndDate">
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-12 m-3">
-          <p>Select your preferred areas</p>
-          <select id="travelAreas" class="form-select" >
-            <option value="" selected>Select a Travel Area</option>
-            <option value="Beruwala">Beruwala</option>
-            <option value="Kaluthara">Kaluthara</option>
-          </select>
-        </div>
         <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
           <p id="result"></p>
         </div>
@@ -142,12 +134,7 @@
               <input type="date" class="form-control mt-1 hotelStayEndDate" id="hotelStayEndDateMain">
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayCostMain">Hotel Stay Cost</label>
-              <input type="number" class="form-control mt-1 hotelStayEndDate" id="hotelStayCostMain" readonly value="100000">
-            </div>
-          </div>
+
           <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
             <div class="form-group">
               <label for="hotelStayHotel">Hotel Stay Hotel Name Select</label>
@@ -160,6 +147,12 @@
             <div class="form-group">
               <label for="hotelStayHotelId">Hotel Stay Hotel  Id</label>
               <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelId" readonly>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="hotelStayCostMain">Hotel Stay Cost</label>
+              <input type="number" class="form-control mt-1 hotelStayEndDate" id="hotelStayCostMain" readonly value="0">
             </div>
           </div>
 <!--          /////////////////////////////////////-->
