@@ -4,12 +4,12 @@ import {StandardResponse} from "../model/StandardResponse.js";
 export class GuideController {
     constructor() {
         this.guideApiUrl = "http://localhost:8097/guideservice/api/v1/guides";
-        $('#addBtn').click(this.createGuide.bind(this));
-        $('#deleteYes').click(this.deleteGuide.bind(this));
-        $('#updateBtn').click(this.updateGuide.bind(this));
+        $('#addBtn').on('click', this.createGuide.bind(this));
+        $('#deleteYes').on('click', this.deleteGuide.bind(this));
+        $('#updateBtn').on('click', this.updateGuide.bind(this));
         this.guideExperienceElement = $('#guideExperience');
         this.guideRemarksElement = $('#guideRemarks');
-        $('#clearFieldBtn').click(this.clearInputFields.bind(this));
+        $('#clearFieldBtn').on('click', this.clearInputFields.bind(this));
         this.guideNameElement = $('#guideName');
         this.guideDobElement = $('#dob');
         this.contactElement = $('#phoneNumber');
@@ -25,8 +25,8 @@ export class GuideController {
         this.profileImageSectionElement = $('#guideImageSection');
         this.guideGenderElement = $('#guideGender');
         this.searchFieldElement = $('#searchGuide');
+        this.guideManDayValueElement = $('#guideManDayValue');
         this.searchFieldElement.on('keyup', this.searchGuides.bind(this));
-
         this.selectedGuide = null;
 
     }
@@ -51,7 +51,7 @@ export class GuideController {
             const guideName = guide.guideName.toLowerCase();
             const guideContact = guide.contact.toLowerCase();
             const searchText = this.searchFieldElement.val().toLowerCase();
-            if(guideName.includes(searchText) || guideContact.includes(searchText)){
+            if (guideName.includes(searchText) || guideContact.includes(searchText)) {
                 return guide;
             }
         });
@@ -59,16 +59,24 @@ export class GuideController {
     }
 
     createGuide(e) {
+        e.preventDefault();
+        const guideId = this.guideIdElement.val();
+
+        if (guideId !== null || guideId !== "") {
+            alert('no id you should update');
+            return;
+        }
         if (this.isAnyFieldNull()) {
             alert('check fields');
         }
         if (this.imagesEmpty()) {
             alert('check images');
         }
-        e.preventDefault();
+
         const guideName = this.guideNameElement.val();
         const dob = this.guideDobElement.val();
 
+        const guideManDayValue = this.guideManDayValueElement.val();
 
         const gender = this.guideGenderElement.val();
         const contact = this.contactElement.val();
@@ -77,7 +85,7 @@ export class GuideController {
         const guideIdImgFront = $('#guideIdImgFront')[0].files[0];
         const guideIdImgBack = $('#guideIdImgBack')[0].files[0];
         const guideProfileImg = $('#guideProfileImg')[0].files[0];
-        const dto = new GuideDTO(guideName, dob, gender, contact, guideExperience, guideRemarks);
+        const dto = new GuideDTO(guideName, dob, gender, contact, guideExperience, guideRemarks, guideManDayValue);
         const formData = new FormData();
         const jsonDTO = JSON.stringify(dto);
         const blob = new Blob([jsonDTO], {type: 'application/json'});
@@ -110,6 +118,7 @@ export class GuideController {
         const guideId = this.guideIdElement.val();
         if (guideId === null || guideId === undefined || guideId === "") {
             alert('no id you should save');
+            return;
         }
         e.preventDefault();
         if (this.isAnyFieldNull()) {
@@ -117,6 +126,7 @@ export class GuideController {
             return;
         }
         const guideName = this.guideNameElement.val();
+        const guideManDayValue = this.guideManDayValueElement.val();
         const dob = this.guideDobElement.val();
         const gender = this.guideGenderElement.val();
         const contact = this.contactElement.val();
@@ -127,7 +137,15 @@ export class GuideController {
         const guideProfileImg = $('#guideProfileImg')[0].files[0];
 
 
-        const dto = new GuideDTO(guideName, dob, gender, contact, guideExperience, guideRemarks);
+        const dto = new GuideDTO(
+            guideName,
+            dob,
+            gender,
+            contact,
+            guideExperience,
+            guideRemarks,
+            guideManDayValue
+        );
         const formData = new FormData();
         const jsonDTO = JSON.stringify(dto);
         const blob = new Blob([jsonDTO], {type: 'application/json'});
@@ -184,7 +202,7 @@ export class GuideController {
         console.log(data);
         data.forEach((guide) => {
             const guideCard = document.createElement("div");
-            guideCard.className = "card col-lg-3 col-md-6 col-sm-12 m-4";
+            guideCard.className = "card col-lg-3 col-md-5 col-sm-12 m-4";
             guideCard.id = guide.guideId;
             guideCard.innerHTML = `
                             <div class="card-body">
@@ -200,6 +218,7 @@ export class GuideController {
 
     clearInputFields() {
         this.guideNameElement.val('');
+        this.guideManDayValueElement.val('');
         this.guideIdElement.val('');
         this.guideDobElement.val('');
         this.contactElement.val('');
@@ -216,7 +235,6 @@ export class GuideController {
 
     clickOnCard(e) {
         const target = $(e.target);
-
         const guideId = e.currentTarget.id;
         const guide = this.guides.find(value => value.guideId === guideId);
         this.selectedGuide = guide;
@@ -229,7 +247,7 @@ export class GuideController {
         this.guideExperienceElement.val(guide.guideExperience);
         this.guideRemarksElement.val(guide.guide_remarks);
         this.guideGenderElement.val(guide.gender);
-
+        this.guideManDayValueElement.val(guide.guideManDayValue);
         this.imageIdFrontElement.attr('src', `data:image/**;base64,${guide.guideIdImgFront}`);
         this.imageIdFrontSectionElement.css('display', 'block');
         this.imageIdBackElement.attr('src', `data:image/**;base64,${guide.guideIdImgBack}`);
@@ -246,12 +264,16 @@ export class GuideController {
 
     isAnyFieldNull() {
         const guideName = this.guideNameElement.val();
+        const guideManDayValue = this.guideManDayValueElement.val();
         const guideDob = this.guideDobElement.val();
         const contact = this.contactElement.val();
         const experience = this.guideExperienceElement.val();
         const remarks = this.guideRemarksElement.val();
         const gender = this.guideGenderElement.val();
         if (gender === null || gender === undefined || gender === "") {
+            return true;
+        }
+        if (guideManDayValue === null || guideManDayValue === undefined || guideManDayValue === 0) {
             return true;
         }
         if (guideName === null || guideName === undefined || guideName === "") {

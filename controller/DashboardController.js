@@ -1,13 +1,15 @@
 import {HotelStayDto} from "../model/HotelStayDto.js";
 import {StandardResponse} from "../hotel-admin/model/StandardResponse.js";
+import {HotelStayDtoCard} from "../model/HotelStayDtoCard.js";
 
 export class DashboardController {
 
 
     constructor() {
+        this.hotelStayOrderNumber = 0;
         this.hotelStaySelectedHotel = null;
         this.setUpMap();
-        this.hotelStayDtos = [];
+        this.hotelStayDtoCards = [];
         this.hotels = [];
         this.normalHotelApiUrl = "http://localhost:8092/hotelservice/api/v1/getAll";
         this.getAllHotels();
@@ -58,6 +60,7 @@ export class DashboardController {
         this.hotelStayHotelPackageIdEl = $(`#hotelStayHotelPackageId`);
         this.hotelStayHotelPackagePriceEl = $(`#hotelStayHotelPackagePrice`);
         this.hotelStayCostMainEl = $(`#hotelStayCostMain`);
+        this.hotelStayLocationEl = $(`#hotelStayLocation`);
         this.hotelStayHotelPackageEl.on('change', this.hotelStayHotelPackageElOnChange.bind(this));
 
 
@@ -99,7 +102,7 @@ export class DashboardController {
             }
             return false;
         });
-
+        console.log('-----------')
         console.log(this.hotels);
         this.hotels.forEach(hotel => {
             const option = $("<option></option>")
@@ -194,8 +197,9 @@ export class DashboardController {
         this.getAllHotels();
         this.packageDetailsEl.html(this.packageDetailsMap[selectedPackage] || "");
         if (selectedPackage === 'REGULAR') {
-            console.log('regular')
+            console.log('regular');
             this.hotels = this.hotels.filter(hotel => hotel.hotelCategory === 'TWO_STAR' || hotel.hotelCategory === "THREE_STAR");
+            console.log(this.hotels)
         }
         if (selectedPackage === 'SUPER_LUXURY') {
             this.hotels = this.hotels.filter(hotel => hotel.hotelCategory === 'FIVE_STAR');
@@ -253,24 +257,18 @@ export class DashboardController {
 
 
     addHotelStay() {
-        console.log('remaining days', this.tripNoDaysRemaining)
         if (this.tripNoDaysRemaining <= 0) {
             alert('days are full')
             return;
         }
         const startDate = new Date(this.currentEndDate);
         const endDate = new Date(this.hotelStayEndDateMainEl.val());
-        console.log('ss start date', startDate);
-        console.log('ss end date', endDate);
         const timeDiff = endDate - startDate;
 
         let daysDifference = Math.ceil(timeDiff / (1000 * 60 * 60 * 24) + 1);
         this.tripNoDaysRemaining -= daysDifference;
 
-        console.log(daysDifference);
-        const hotelStayDto = new HotelStayDto(startDate, endDate);
-        this.hotelStayDtos.push(hotelStayDto);
-        this.loadHotelPackages();
+        // this.loadHotelPackages();
         this.noOfDaysRemainingEl.html(this.tripNoDaysRemaining);
         //setting the starting date of new hotel stay with selected previous date
         const currentDate = this.settingStartDate(endDate);
@@ -279,12 +277,53 @@ export class DashboardController {
         //setting hotel end date
         this.hotelStayEndDateMainEl.attr("min", currentDate.toISOString().split('T')[0]);
         this.hotelStayEndDateMainEl.attr("max", new Date(this.tripEndDateEl.val()).toISOString().split('T')[0]);
+
+
+        const hotelStayEndDate = this.hotelStayEndDateMainEl.val();
+        const hotelStayStartDate = this.hotelStayStartDateMainEl.val();
+        const lat = this.latEl.val();
+        const lng = this.lngEl.val();
+        const hotelStayHotelId = this.hotelStayHotelIdEl.val();
+        const hotelStayTotalCost = this.hotelStayCostMainEl.val();
+        const hotelStayHotelPackageId = this.hotelStayHotelPackageIdEl.val();
+        const hotelStayHotelPackageType = this.hotelStayHotelPackageTypeEl.val();
+        const hotelStayHotelPackageRoomType = this.hotelStayHotelPackageRoomTypeEl.val();
+        const location = this.hotelStayLocationEl.val();
+
+        const hotelStayDtoCard = new HotelStayDtoCard(
+            this.hotelStayOrderNumber++,
+            hotelStayStartDate,
+            hotelStayEndDate,
+            hotelStayTotalCost,
+            hotelStayHotelId,
+            hotelStayHotelPackageId,
+            location,
+            lat,
+            lng,
+            hotelStayHotelPackageType,
+            hotelStayHotelPackageRoomType
+        );
+        this.hotelStayDtoCards.push(hotelStayDtoCard);
+        this.loadHotelStays();
+        this.clearFields();
         if (this.tripNoDaysRemaining === 0) {
             this.addHotelStayBtnEl.prop('disabled', true);
             alert('days are full')
         } else {
             this.addHotelStayBtnEl.prop('disabled', false);
         }
+    }
+
+    clearFields() {
+        this.latEl.val('');
+        this.lngEl.val('');
+        this.hotelStayHotelEl.val('');
+        this.hotelStayHotelIdEl.val('');
+        this.hotelStayCostMainEl.val('');
+        this.hotelStayHotelPackageEl.val('');
+        this.hotelStayHotelPackageIdEl.val('');
+        this.hotelStayHotelPackageTypeEl.val('');
+        this.hotelStayHotelPackageRoomTypeEl.val('');
     }
 
     settingStartDate(endDate) {
@@ -309,7 +348,7 @@ export class DashboardController {
     loadHotelPackages() {
         const packageInfoElement = $(`#hotelStays`);
         packageInfoElement.html('');
-        this.hotelStayDtos.forEach(hotelStayDto => {
+        this.hotelStayDtoCards.forEach(hotelStayDto => {
             const hotelStay = `
                     <div class="package-info col-12" >
                       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
@@ -344,6 +383,10 @@ export class DashboardController {
                 console.log("Error: " + errorThrown);
             }
         });
+    }
+
+    loadHotelStays() {
+
     }
 }
 

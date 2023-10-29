@@ -291,6 +291,8 @@ export class HotelController {
         this.hotelContactElement.val(hotel.hotelContactNumber);
         this.hotelIsCancelledElement.val(hotel.isHotelCancellationCriteriaFree.toString());
         this.hotelCancellationCostElement.val(hotel.hotelCancellationCost);
+        this.hotelLocationLatElement.val(hotel.hotelLocationLat);
+        this.hotelLocationLngElement.val(hotel.hotelLocationLng);
 
         const imageDisplay = $('#imageDisplay');
         const hotelImageDTOS = hotel.hotelImageDTOS;
@@ -360,6 +362,8 @@ export class HotelController {
         this.hotelIsCancelledElement.val('true');
         this.hotelRemarksElement.val('');
         this.hotelCancellationCostElement.val(0);
+        this.hotelLocationLatElement.val('');
+        this.hotelLocationLngElement.val('');
         this.hotelLocationLatElement.val('');
         this.hotelLocationLngElement.val('');
     }
