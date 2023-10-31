@@ -46,3 +46,13 @@ handleImageChange(
     document.getElementById('vehicleFrontInteriorPic'),
     document.getElementById('vehicleFrontInteriorPicSection')
 );
+handleImageChange(
+    document.getElementById('driverDrivingLicenseFront'),
+    document.getElementById('driverDrivingLicenseFrontPic'),
+    document.getElementById('driverDrivingLicenseFrontSection')
+);
+handleImageChange(
+    document.getElementById('driverDrivingLicenseBack'),
+    document.getElementById('driverDrivingLicenseBackPic'),
+    document.getElementById('driverDrivingLicenseBackSection')
+);

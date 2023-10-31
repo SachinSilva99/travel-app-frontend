@@ -4,7 +4,10 @@ body {
     font-family: 'Roboto', sans-serif !important;
 }
 
-#vehicleMainPicSection, #vehicleFrontPicSection, #vehicleBackPicSection, #vehicleBackInteriorPicSection, #vehicleFrontInteriorPicSection {
+#vehicleMainPicSection, #vehicleFrontPicSection, #vehicleBackPicSection, #vehicleBackInteriorPicSection, #vehicleFrontInteriorPicSection,
+#driverDrivingLicenseFrontSection,
+#driverDrivingLicenseBackSection
+{
     display: none;
 }
 

@@ -30,6 +30,8 @@ export class VehicleController {
         this.vehicleMainPicEl = $('#vehicleMainPic');
         this.vehicleFrontPicEl = $('#vehicleFrontPic');
         this.vehicleBackPicEl = $('#vehicleBackPic');
+        this.driverDrivingLicenseFrontEl = $('#driverDrivingLicenseFront');
+        this.driverDrivingLicenseBackEl = $('#driverDrivingLicenseBack');
         this.vehicleBackInteriorPicEl = $('#vehicleBackInteriorPic');
         this.vehicleFrontInteriorPicEl = $('#vehicleFrontInteriorPic');
         this.vehicleImgFrontInteriorEl = $('#vehicleImgFrontInterior');
@@ -40,6 +42,10 @@ export class VehicleController {
         this.vehicleBackInteriorPicSectionEl = $('#vehicleBackInteriorPicSection');
         this.vehicleFrontInteriorPicSectionEl = $('#vehicleFrontInteriorPicSection');
         this.vehicleSearchEl = $('#searchVehicle');
+        this.driverDrivingLicenseFrontSectionEl = $('#driverDrivingLicenseFrontSection');
+        this.driverDrivingLicenseBackSectionEl = $('#driverDrivingLicenseBackSection');
+        this.driverDrivingLicenseFrontPicEl = $('#driverDrivingLicenseFrontPic');
+        this.driverDrivingLicenseBackPicEl = $('#driverDrivingLicenseBackPic');
         this.selectedVehicle = null;
         $('#clearFieldBtn').click(this.clearInputFields.bind(this));
         $('#vehiclesContainer').on('click', '.card', this.clickOnCard.bind(this));
@@ -94,6 +100,8 @@ export class VehicleController {
         const vehicleImgBack = this.vehicleImgBackEl[0].files[0];
         const vehicleImgFrontInterior = this.vehicleImgFrontInteriorEl[0].files[0];
         const vehicleImgBackInterior = this.vehicleImgBackInteriorEl[0].files[0];
+        const driverDrivingLicenseFront = this.driverDrivingLicenseFrontEl[0].files[0];
+        const driverDrivingLicenseBack = this.driverDrivingLicenseBackEl[0].files[0];
 
         const dto = new VehicleDTO(vehicleBrand,
             vehicleName,
@@ -108,7 +116,7 @@ export class VehicleController {
             vehicleDriverName,
             vehicleDriverContact,
             vehicleFeeForOneDay100km,
-            vehicleFeeForExtra1km
+            vehicleFeeForExtra1km,
         );
 
         const formData = new FormData();
@@ -122,6 +130,8 @@ export class VehicleController {
         formData.set("vehicleImgBack", vehicleImgBack);
         formData.set("vehicleImgFrontInterior", vehicleImgFrontInterior);
         formData.set("vehicleImgBackInterior", vehicleImgBackInterior);
+        formData.set("driverDrivingLicenseFront", driverDrivingLicenseFront);
+        formData.set("driverDrivingLicenseBack", driverDrivingLicenseBack);
         console.log(dto);
         $.ajax({
             type: "POST",
@@ -164,7 +174,8 @@ export class VehicleController {
         const vehicleImgBack = this.vehicleImgBackEl[0].files[0];
         const vehicleImgFrontInterior = this.vehicleImgFrontInteriorEl[0].files[0];
         const vehicleImgBackInterior = this.vehicleImgBackInteriorEl[0].files[0];
-
+        const driverDrivingLicenseFront = this.driverDrivingLicenseFrontEl[0].files[0];
+        const driverDrivingLicenseBack = this.driverDrivingLicenseBackEl[0].files[0];
 
         const dto = new VehicleDTO(vehicleBrand,
             vehicleName,
@@ -198,10 +209,15 @@ export class VehicleController {
         }
         if (vehicleImgFrontInterior !== null) {
             formData.set("vehicleImgFrontInterior", vehicleImgFrontInterior);
-
         }
         if (vehicleImgBackInterior !== null) {
             formData.set("vehicleImgBackInterior", vehicleImgBackInterior);
+        }
+        if (driverDrivingLicenseFront !== null) {
+            formData.set("driverDrivingLicenseFront", driverDrivingLicenseFront);
+        }
+        if (driverDrivingLicenseBack !== null) {
+            formData.set("driverDrivingLicenseBack", driverDrivingLicenseBack);
         }
         console.log(dto);
         $.ajax({
@@ -288,6 +304,8 @@ export class VehicleController {
         this.vehicleBackPicSectionEl.css('display', 'none');
         this.vehicleBackInteriorPicSectionEl.css('display', 'none');
         this.vehicleFrontInteriorPicSectionEl.css('display', 'none');
+        this.driverDrivingLicenseBackSectionEl.css('display', 'none');
+        this.driverDrivingLicenseFrontSectionEl.css('display', 'none');
     }
 
     clickOnCard(e) {
@@ -317,7 +335,6 @@ export class VehicleController {
         this.vehicleFeeForExtra1kmEl.val(vehicle.feeForExtra1km);
 
         this.vehicleMainPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleMainImage}`);
-
         this.vehicleFrontPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleImgFront}`);
         this.vehicleBackPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleImgBack}`);
         this.vehicleFrontInteriorPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleImgFrontInterior}`);
@@ -328,7 +345,11 @@ export class VehicleController {
         this.vehicleBackPicSectionEl.css('display', 'block');
         this.vehicleBackInteriorPicSectionEl.css('display', 'block');
         this.vehicleFrontInteriorPicSectionEl.css('display', 'block');
-        console.log(vehicle);
+
+        this.driverDrivingLicenseFrontSectionEl.css('display', 'block');
+        this.driverDrivingLicenseFrontPicEl.attr('src', `data:image/**;base64,${vehicle.driverDrivingLicenseFront}`);
+        this.driverDrivingLicenseBackSectionEl.css('display', 'block');
+        this.driverDrivingLicenseBackPicEl.attr('src', `data:image/**;base64,${vehicle.driverDrivingLicenseBack}`);
     }
 
     isAnyFieldNull() {

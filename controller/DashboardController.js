@@ -1,4 +1,3 @@
-import {HotelStayDto} from "../model/HotelStayDto.js";
 import {StandardResponse} from "../hotel-admin/model/StandardResponse.js";
 import {HotelStayDtoCard} from "../model/HotelStayDtoCard.js";
 
@@ -6,12 +5,19 @@ export class DashboardController {
 
 
     constructor() {
+        this.userSelectedGuide = null;
+        this.userSelectedVehicle = null;
         this.hotelStayOrderNumber = 0;
         this.hotelStaySelectedHotel = null;
         this.setUpMap();
         this.hotelStayDtoCards = [];
         this.hotels = [];
+        this.vehicleApiUrl = "http://localhost:8095/vehicleservice/api/v1/vehicles";
+        this.getAllVehicles();
+        this.vehicles = [];
         this.normalHotelApiUrl = "http://localhost:8092/hotelservice/api/v1/getAll";
+        this.guideApiUrl = "http://localhost:8097/guideservice/api/v1/guides";
+        this.guides = [];
         this.getAllHotels();
         this.currentEndDate = null;
         this.tripStartDateEl = $("#tripStartDate");
@@ -64,9 +70,96 @@ export class DashboardController {
         this.resetHotelStaysBtnEl = $(`#resetHotelStaysBtn`);
         this.isWithGuideEl = $(`#isWithGuide`);
         this.guideSectionEls = $(`.guideSection`);
+        this.guideIdEl = $(`#guideId`);
+        this.guideIdEl.on('change', this.guideIdOnChange.bind(this));
         this.isWithGuideEl.on('change', this.isWithGuideOnChange.bind(this));
         this.resetHotelStaysBtnEl.on('click', this.resetHotels.bind(this));
         this.hotelStayHotelPackageEl.on('change', this.hotelStayHotelPackageElOnChange.bind(this));
+        this.guideManDayValueEl = $(`#guideManDayValue`);
+        this.vehicleIdEl = $(`#vehicleId`);
+        this.feeForExtra1kmEl = $(`#feeForExtra1km`);
+        this.feeForOneDay100kmEl = $(`#feeForOneDay100km`);
+        this.noOfSeatsEl = $(`#noOfSeats`);
+        this.vehicleIdEl.on('change', this.vehicleIdOnChange.bind(this));
+        this.loadGuides();
+        this.getAllVehicles();
+
+    }
+
+    vehicleIdOnChange() {
+        const vehicleId = this.vehicleIdEl.val();
+        this.userSelectedVehicle = null;
+        this.feeForExtra1kmEl.val(0);
+        this.feeForOneDay100kmEl.val(0);
+        const vehicle = this.vehicles.find(vehicle => vehicle.vehicleId === vehicleId);
+        if (vehicle === undefined) return;
+        this.feeForExtra1kmEl.val(vehicle.feeForExtra1km);
+        this.feeForOneDay100kmEl.val(vehicle.feeForOneDay100km);
+        this.noOfSeatsEl.val(vehicle.vehicleNoOfSeats);
+    }
+
+    getAllVehicles() {
+        $.ajax({
+            url: this.vehicleApiUrl,
+            type: "GET",
+            dataType: "json",
+            success: (res) => {
+                const standardResponse = new StandardResponse(res.code, res.msg, res.data);
+                this.vehicles = standardResponse.data;
+                // this.loadVehicleIds();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error: " + errorThrown);
+            }
+        });
+    }
+
+    loadVehicleIds() {
+        $("#vehicleId option:not(:first-child)").remove();
+        this.vehicles.forEach(vehicle => {
+            const option = $("<option></option>")
+                .attr("value", vehicle.vehicleId)
+                .attr("id", vehicle.vehicleId)
+                .text(`Brand : ${vehicle.vehicleBrand}  Name : ${vehicle.vehicleName}`);
+            this.vehicleIdEl.append(option);
+        });
+    }
+
+    guideIdOnChange() {
+        const guideId = this.guideIdEl.val();
+        this.userSelectedGuide = null;
+        const guide = this.guides.find(guideDto => guideDto.guideId === guideId);
+        this.guideManDayValueEl.val(0);
+        if (guide === undefined) return;
+        this.guideManDayValueEl.val(guide.guideManDayValue);
+        this.userSelectedGuide = guide;
+    }
+
+    loadGuides() {
+        $.ajax({
+            url: this.guideApiUrl,
+            type: "GET",
+            dataType: "json",
+            success: (res) => {
+                const standardResponse = new StandardResponse(res.code, res.msg, res.data);
+                this.guides = standardResponse.data;
+                this.loadGuideIds();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error: " + errorThrown);
+            }
+        });
+    }
+
+    loadGuideIds() {
+        $("#guideId option:not(:first-child)").remove();
+        this.guides.forEach(guideDto => {
+            const option = $("<option></option>")
+                .attr("value", guideDto.guideId)
+                .attr("id", guideDto.guideId)
+                .text(guideDto.guideName + ' ' + guideDto.guideId + ' Exp : ' + guideDto.guideExperience);
+            this.guideIdEl.append(option);
+        });
     }
 
     isWithGuideOnChange() {
@@ -88,7 +181,6 @@ export class DashboardController {
         const packageDto = this.hotelStaySelectedHotel
             .hotelPackageDTOS
             .find(pkgDto => pkgDto.hotelPackageId === this.hotelStayHotelPackageEl.val());
-        console.log(packageDto);
         if (packageDto === undefined || packageDto === null) {
             this.hotelStayHotelPackageIdEl.val('');
             this.hotelStayHotelPackageTypeEl.val('');
@@ -120,8 +212,6 @@ export class DashboardController {
             }
             return false;
         });
-        console.log('-----------');
-        console.log(this.hotels);
         this.hotels.forEach(hotel => {
             const option = $("<option></option>")
                 .attr("value", hotel.hotelName)
@@ -178,8 +268,6 @@ export class DashboardController {
                 this.latEl.val(this.lat);
                 this.lngEl.val(this.lng);
                 this.latElOnChange();
-                console.log(data);
-                console.log(this.lng);
                 infoWindow.setContent(
                     JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
                 );
@@ -212,19 +300,25 @@ export class DashboardController {
     PackageSelect() {
         const selectedPackage = this.packageSelectEl.val();
         this.getAllHotels();
+        this.getAllVehicles();
         this.packageDetailsEl.html(this.packageDetailsMap[selectedPackage] || "");
         if (selectedPackage === 'REGULAR') {
-            console.log('regular');
             this.hotels = this.hotels.filter(hotel => hotel.hotelCategory === 'TWO_STAR' || hotel.hotelCategory === "THREE_STAR");
-            console.log(this.hotels)
+            this.vehicles = this.vehicles.filter(vehicle => vehicle.vehicleCategory === 'ECONOMY');
+        }
+        if (selectedPackage === 'MID_LEVEL') {
+            this.hotels = this.hotels.filter(hotel => hotel.hotelCategory === 'FOUR_STAR' || hotel.hotelCategory === "THREE_STAR");
+            this.vehicles = this.vehicles.filter(vehicle => vehicle.vehicleCategory === 'MID_RANGE');
+        }
+        if (selectedPackage === 'LUXURY') {
+            this.hotels = this.hotels.filter(hotel => hotel.hotelCategory === 'FOUR_STAR' || hotel.hotelCategory === "FIVE_STAR");
+            this.vehicles = this.vehicles.filter(vehicle => vehicle.vehicleCategory === 'LUXURY');
         }
         if (selectedPackage === 'SUPER_LUXURY') {
             this.hotels = this.hotels.filter(hotel => hotel.hotelCategory === 'FIVE_STAR');
+            this.vehicles = this.vehicles.filter(vehicle => vehicle.vehicleCategory === 'SUPER_LUXURY');
         }
-        this.hotels.forEach(hotel => {
-            return hotel;
-        });
-
+        this.loadVehicleIds();
     }
 
     updateNumberOfDays() {
@@ -245,25 +339,19 @@ export class DashboardController {
         if (startDate && endDate && startDate <= endDate) {
             const timeDiff = Math.abs(endDate - startDate);
             const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
-
-            console.log('dif', diffDays)
-
             if (isNaN(timeDiff)) {
                 return;
             }
             this.tripNoDays = diffDays;
             this.tripNoDaysRemaining = diffDays;
-
             this.hotelStayEndDateMainEl.attr("min", startDate.toISOString().split('T')[0]);
             this.hotelStayEndDateMainEl.attr("max", endDate.toISOString().split('T')[0]);
             this.resultEl.text(`Trip Number of days: ${diffDays}`);
-            console.log('days ' + this.tripNoDaysRemaining);
             this.noOfDaysRemainingEl.html(this.tripNoDaysRemaining);
             this.addHotelStayBtnEl.prop("disabled", false);
             this.hotelStayStartDateMainEl.val(this.tripStartDateEl.val());
             this.hotelStayStartDateMainEl.prop('disabled', true);
             this.currentEndDate = this.tripStartDate;
-            console.log(this.currentEndDate)
 
         } else {
             this.resultEl.text(`Trip Number of days: ${0}`);
@@ -278,8 +366,14 @@ export class DashboardController {
             alert('days are full')
             return;
         }
+        const endDateSelected = this.hotelStayEndDateMainEl.val();
+        if (endDateSelected === '') {
+            alert('pick end first');
+            return;
+        }
         const startDate = new Date(this.currentEndDate);
         const endDate = new Date(this.hotelStayEndDateMainEl.val());
+
         const timeDiff = endDate - startDate;
 
         let daysDifference = Math.ceil(timeDiff / (1000 * 60 * 60 * 24) + 1);
@@ -340,6 +434,7 @@ export class DashboardController {
         this.hotelStayHotelPackageIdEl.val('');
         this.hotelStayHotelPackageTypeEl.val('');
         this.hotelStayCostMainEl.val(0);
+        this.hotelStayHotelPackagePriceEl.val(0);
         this.hotelStayHotelPackageRoomTypeEl.val('');
     }
 
@@ -356,6 +451,8 @@ export class DashboardController {
     }
 
     documentOnReady() {
+
+
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         const formattedTomorrow = tomorrow.toISOString().split('T')[0];
@@ -371,7 +468,6 @@ export class DashboardController {
             success: (res) => {
                 const standardResponse = new StandardResponse(res.code, res.msg, res.data);
                 this.hotels = standardResponse.data;
-                console.log(this.hotels)
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error: " + errorThrown);

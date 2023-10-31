@@ -19,7 +19,6 @@ export class HotelsController {
             packageInfoElement.html(packageHtml);
             return;
         }
-        console.log(selectedHotelId, selectedPackage);
         this.loadPackages(selectedHotelId, selectedPackage);
     }
 
@@ -29,7 +28,6 @@ export class HotelsController {
             type: "GET",
             dataType: "json",
             success: (res) => {
-                console.log(res)
                 const packageInfoElement = $(`#${hotelId} .package-info`);
                 const packageData = res.data;
                 const packageHtml = `
@@ -72,7 +70,6 @@ export class HotelsController {
                 const standardResponse = new StandardResponse(res.code, res.msg, res.data);
                 this.hotels = standardResponse.data;
                 this.loadData(standardResponse.data);
-                console.log(this.hotels)
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error: " + errorThrown);
@@ -84,7 +81,6 @@ export class HotelsController {
         $('#hotelsContainer').innerHTML = '';
         let innerHtml = ``;
         this.hotels.forEach(hotel => {
-            console.log('works');
             const hotelPackageDtos = hotel.hotelPackageDTOS;
             let selectOptions = '';
 

@@ -96,7 +96,7 @@
           <div id="package-details"></div>
         </div>
         <div class="row">
-          <div class="col-lg-3 col-md-6 col-12 m-3 mb-5">
+          <div class="col-lg-3 col-md-6 col-12 m-3 mb-2">
             <div class="form-group">
               <label for="isWithGuide">Do you need a guide?</label>
               <select id="isWithGuide" class="form-select" aria-label="Default select example">
@@ -105,32 +105,21 @@
               </select>
             </div>
           </div>
-          <div class="guideSection col-lg-3 col-md-6 col-12 m-3 mb-5">
+          <div class="guideSection col-lg-7 col-md-12 col-12 m-3 mb-2">
             <div class="form-group">
               <label for="guideId">Pick your guide</label>
               <select id="guideId" class="form-select" aria-label="Default select example">
-                <option value="">Guide 01</option>
-                <option value="">Guide 02</option>
-                <option value="">Guide 03</option>
-                <option value="">Guide 04</option>
-                <option value="">Guide 05</option>
+                <option value="">Select Guide</option>
               </select>
             </div>
           </div>
-          <div class="guideSection col-lg-3 col-md-6 col-12 m-3 mb-5">
+          <div class="guideSection col-lg-3 col-md-6 col-12 m-3 mb-2">
             <div class="form-group">
-              <label for="test">Pick your guide</label>
-              <select id="test" class="form-select" aria-label="Default select example">
-                <option value="">Guide 01</option>
-                <option value="">Guide 02</option>
-                <option value="">Guide 03</option>
-                <option value="">Guide 04</option>
-                <option value="">Guide 05</option>
-              </select>
+              <label for="guideManDayValue">Guide Man Value LKR</label>
+              <input type="number" class="form-control mt-1" id="guideManDayValue" value="0" readonly>
             </div>
           </div>
         </div>
-
         <div class="col-3 m-3">
           <div id="guide-area"></div>
         </div>
@@ -140,35 +129,19 @@
         <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
           <div class="form-group">
             <label for="noOfAdults">Number of Adults</label>
-            <input type="number" class="form-control mt-1 " id="noOfAdults" value="0">
+            <input type="number" class="form-control mt-1 " id="noOfAdults" value="0" min="1" max="50">
           </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
           <div class="form-group">
             <label for="noOfChildren">Number of children</label>
-            <input type="number" class="form-control mt-1" id="noOfChildren" value="0">
+            <input type="number" class="form-control mt-1" id="noOfChildren" value="0" min="0" max="50">
           </div>
         </div>
       </div>
+
+
       <hr>
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="vehicleId">Select a vehicle</label>
-            <select class="form-select" aria-label="Default select example" id="vehicleId">
-              <option selected value="">Car Benze No of seats 3 </option>
-              <option selected value="">Car Benze No of seats 3 </option>
-              <option selected value="">Car Benze No of seats 3 </option>
-            </select>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="vehicle Pr">Number of children</label>
-              <input type="number" class="form-control mt-1" id="noOfChildren" value="0">
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
           <div class="form-group">
@@ -184,6 +157,35 @@
         </div>
         <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
           <p id="result"></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
+          <div class="form-group">
+            <label for="vehicleId">Select a vehicle</label>
+            <select class="form-select" aria-label="Default select example" id="vehicleId">
+              <option selected value="">Select Vehicle</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+          <div class="form-group">
+            <label for="feeForExtra1km">feeForExtra1km</label>
+            <input type="number" class="form-control mt-1" id="feeForExtra1km" value="0" readonly>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+          <div class="form-group">
+            <label for="feeForOneDay100km">feeForOneDay100km</label>
+            <input type="number" class="form-control mt-1" id="feeForOneDay100km" value="0" readonly>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+          <div class="form-group">
+            <label for="noOfSeats">noOfSeats</label>
+            <input type="number" class="form-control mt-1" id="noOfSeats" value="0" readonly >
+          </div>
         </div>
       </div>
 
