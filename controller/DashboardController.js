@@ -1,10 +1,17 @@
 import {StandardResponse} from "../hotel-admin/model/StandardResponse.js";
 import {HotelStayDtoCard} from "../model/HotelStayDtoCard.js";
+import {HotelStayDto} from "../model/HotelStayDto";
+import {TravelDto} from "../model/TravelDto";
 
 export class DashboardController {
 
 
     constructor() {
+        this.lastLat = null;
+        this.lastLng = null;
+        this.nextTravelLat = 6.584034509543009;
+        this.nextTravelLng = 79.96996595913906;
+        this.travelKms = 0;
         this.userSelectedGuide = null;
         this.userSelectedVehicle = null;
         this.hotelStayOrderNumber = 0;
@@ -12,6 +19,7 @@ export class DashboardController {
         this.setUpMap();
         this.hotelStayDtoCards = [];
         this.hotels = [];
+        this.travelIdUrl = 'http://localhost:8000/travelservice/api/v1/travels';
         this.vehicleApiUrl = "http://localhost:8095/vehicleservice/api/v1/vehicles";
         this.getAllVehicles();
         this.vehicles = [];
@@ -21,6 +29,9 @@ export class DashboardController {
         this.getAllHotels();
         this.currentEndDate = null;
         this.tripStartDateEl = $("#tripStartDate");
+        this.placeOrderSectionEl = $("#placeOrderSection");
+        this.totalCostEl = $("#totalCost");
+        $('#placeTravelBtn').on('click', this.placeOrder.bind(this));
         $(document).ready(this.documentOnReady.bind(this));
 
         this.packageDetailsMap = {
@@ -80,9 +91,67 @@ export class DashboardController {
         this.feeForExtra1kmEl = $(`#feeForExtra1km`);
         this.feeForOneDay100kmEl = $(`#feeForOneDay100km`);
         this.noOfSeatsEl = $(`#noOfSeats`);
+        this.noOfAdultsEl = $(`#noOfAdults`);
+        this.noOfChildrenEl = $(`#noOfChildren`);
+        this.isWithPetsEl = $(`#isWithPets`);
+        this.bankSlipEl = $(`#bankSlip`);
         this.vehicleIdEl.on('change', this.vehicleIdOnChange.bind(this));
         this.loadGuides();
         this.getAllVehicles();
+
+    }
+
+    placeOrder() {
+        // :TODO complete
+        const today = new Date();
+        const hotelStayDtos = [];
+        this.hotelStayDtoCards.forEach(dtoCard => {
+            const hotelStayDto = new HotelStayDto(
+                dtoCard.hotelStayStartDate,
+                dtoCard.hotelStayEndDate,
+                dtoCard.hotelStayTotalCost,
+                dtoCard.lat,
+                dtoCard.lng,
+                dtoCard.hotelStayHotelId,
+                dtoCard.hotelStayHotelPackageId
+            );
+            hotelStayDtos.push(hotelStayDto);
+        });
+        const travelDto = new TravelDto(
+            this.tripStartDate,
+            this.tripEndDate,
+            this.noOfAdultsEl.val(),
+            this.noOfChildrenEl.val(),
+            this.noOfAdultsEl.val() + this.noOfChildrenEl.val(),
+            this.isWithPetsEl.val(),
+            null, //bank slip
+            this.totalCostEl.text(),
+            today,
+            hotelStayDtos,
+            this.vehicleIdEl.val(),
+            this.packageSelectEl.val(),
+            'eiwufhwufhuh'
+        );
+        const bankSlipImg = this.bankSlipEl[0].files[0];
+
+        const formData = new FormData();
+        const jsonDTO = JSON.stringify(travelDto);
+        const blob = new Blob([jsonDTO], {type: 'application/json'});
+        formData.set("travelDTO", blob);
+        formData.set("bankSlipImg", bankSlipImg);
+        $.ajax({
+            type: "POST",
+            url: this.travelIdUrl,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (response) => {
+                console.log("Travel saved successfully. Travel ID: " + response.data);
+            },
+            error: (error) => {
+                console.error("Error saving guide: " + error.responseText);
+            }
+        });
 
     }
 
@@ -280,11 +349,12 @@ export class DashboardController {
 
     hotelStayHotelElOnChange(e) {
         const selectedOption = this.hotelStayHotelEl.find('option:selected');
-
         const hotelId = selectedOption.attr('id');
         this.hotelStayHotelIdEl.val(hotelId);
         const hotel = this.hotels.find(hotel => hotel.hotelId === hotelId);
         this.hotelStaySelectedHotel = hotel;
+
+
         hotel.hotelPackageDTOS.forEach(pkgDto => {
             const option = $("<option></option>")
                 .attr("value", pkgDto.hotelPackageId)
@@ -362,6 +432,10 @@ export class DashboardController {
 
 
     addHotelStay() {
+        if (this.hotelStayOrderNumber === 0) {
+            this.lastLat = this.nextTravelLat;
+            this.lastLng = this.nextTravelLng;
+        }
         if (this.tripNoDaysRemaining <= 0) {
             alert('days are full')
             return;
@@ -415,15 +489,45 @@ export class DashboardController {
             hotelStayHotelPackageRoomType
         );
         this.hotelStayDtoCards.push(hotelStayDtoCard);
+        const hotel = this.hotels.find(hotel => hotel.hotelId === hotelStayHotelId);
+        const totalKms = this.calculateDistance(hotel.hotelLocationLat, hotel.hotelLocationLng, this.lastLat, this.lastLng);
+        this.travelKms += totalKms;
+        $('#totalKms').text(this.travelKms);
         this.loadHotelStays();
         this.clearFields();
+        this.lastLat = hotel.hotelLocationLat;
+        this.lastLng = hotel.hotelLocationLng;
         if (this.tripNoDaysRemaining === 0) {
             this.addHotelStayBtnEl.prop('disabled', true);
-            alert('days are full')
+            console.log(this.hotelStayDtoCards);
+            alert('days are full');
+            this.loadTotal();
         } else {
             this.addHotelStayBtnEl.prop('disabled', false);
         }
     }
+
+    loadTotal() {
+        this.placeOrderSectionEl.show();
+        let netTotal = 0;
+        const kmsFreeForTrip = this.tripNoDays * 100;
+        let totalCostForVehicle = kmsFreeForTrip * this.feeForOneDay100kmEl;
+
+        if (this.travelKms > kmsFreeForTrip) {
+            const extraKms = this.travelKms - kmsFreeForTrip;
+            const extraCost = this.feeForExtra1kmEl * extraKms;
+            totalCostForVehicle += extraCost;
+        }
+        netTotal += totalCostForVehicle;
+        if (this.userSelectedGuide !== null) {
+            netTotal += this.guideManDayValueEl.val();
+        }
+        this.hotelStayDtoCards.forEach(dtoCard => {
+            netTotal += dtoCard.hotelStayTotalCost;
+        });
+        this.totalCostEl.text(netTotal);
+    }
+
 
     clearFields() {
         this.latEl.val('');
@@ -451,8 +555,6 @@ export class DashboardController {
     }
 
     documentOnReady() {
-
-
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         const formattedTomorrow = tomorrow.toISOString().split('T')[0];

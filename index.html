@@ -138,6 +138,15 @@
             <input type="number" class="form-control mt-1" id="noOfChildren" value="0" min="0" max="50">
           </div>
         </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+          <div class="form-group">
+            <label for="isWithPets">Number of children</label>
+            <select type="number" class="form-control mt-1" id="isWithPets">
+              <option value="false" selected>No</option>
+              <option value="true">Yes</option>
+            </select>
+          </div>
+        </div>
       </div>
 
 
@@ -184,7 +193,7 @@
         <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
           <div class="form-group">
             <label for="noOfSeats">noOfSeats</label>
-            <input type="number" class="form-control mt-1" id="noOfSeats" value="0" readonly >
+            <input type="number" class="form-control mt-1" id="noOfSeats" value="0" readonly>
           </div>
         </div>
       </div>
@@ -192,6 +201,7 @@
       <hr>
       <div class="row">
         <h6 class="col text-start m-3">No of days remaining : <span id="noOfDaysRemaining"></span></h6>
+        <h6 class="col text-start m-3">Total Kms : <span id="totalKms"></span></h6>
       </div>
 
       <div class="container">
@@ -294,7 +304,27 @@
       </div>
       <div class="container" id="hotelStays">
       </div>
+      <div class="container" id="placeOrderSection">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-12 m-4 mt-4">
+            <div class="form-group">
+              <h4>Total cost <span id="totalCost"></span></h4>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="bankSlip">Bank Slip</label>
+              <input type="file" class="form-control mt-1 hotelStayEndDate" id="bankSlip" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 m-4 mt-4">
+          <button id="placeTravelBtn" class="btn btn-success">Place Travel</button>
+        </div>
+      </div>
+
     </div>
+  </div>
   </div>
   <div id="hotels">
     <div class="container">
