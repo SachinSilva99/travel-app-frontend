@@ -61,9 +61,27 @@ export class DashboardController {
         this.hotelStayHotelPackagePriceEl = $(`#hotelStayHotelPackagePrice`);
         this.hotelStayCostMainEl = $(`#hotelStayCostMain`);
         this.hotelStayLocationEl = $(`#hotelStayLocation`);
+        this.resetHotelStaysBtnEl = $(`#resetHotelStaysBtn`);
+        this.isWithGuideEl = $(`#isWithGuide`);
+        this.guideSectionEls = $(`.guideSection`);
+        this.isWithGuideEl.on('change', this.isWithGuideOnChange.bind(this));
+        this.resetHotelStaysBtnEl.on('click', this.resetHotels.bind(this));
         this.hotelStayHotelPackageEl.on('change', this.hotelStayHotelPackageElOnChange.bind(this));
+    }
 
+    isWithGuideOnChange() {
+        const isWithGuide = this.isWithGuideEl.val();
+        if (isWithGuide === 'true') {
+            this.guideSectionEls.show();
+            return;
+        }
+        this.guideSectionEls.hide();
 
+    }
+
+    resetHotels() {
+        this.clearFields();
+        this.hotelStayDtoCards = [];
     }
 
     hotelStayHotelPackageElOnChange(e) {
@@ -102,7 +120,7 @@ export class DashboardController {
             }
             return false;
         });
-        console.log('-----------')
+        console.log('-----------');
         console.log(this.hotels);
         this.hotels.forEach(hotel => {
             const option = $("<option></option>")
@@ -118,7 +136,6 @@ export class DashboardController {
                 .attr("id", '')
                 .text('select a hotel');
             this.hotelStayHotelEl.append(option);
-
         }
 
     }
@@ -317,10 +334,11 @@ export class DashboardController {
     clearFields() {
         this.latEl.val('');
         this.lngEl.val('');
-        this.hotelStayHotelEl.val('');
+
         this.hotelStayHotelIdEl.val('');
         this.hotelStayCostMainEl.val('');
-        this.hotelStayHotelPackageEl.val('');
+        $("#hotelStayHotel option:not(:first-child)").remove();
+        $("#hotelStayHotelPackage option:not(:first-child)").remove();
         this.hotelStayHotelPackageIdEl.val('');
         this.hotelStayHotelPackageTypeEl.val('');
         this.hotelStayHotelPackageRoomTypeEl.val('');
@@ -345,29 +363,6 @@ export class DashboardController {
         this.tripStartDateEl.attr("min", formattedTomorrow);
     }
 
-    loadHotelPackages() {
-        const packageInfoElement = $(`#hotelStays`);
-        packageInfoElement.html('');
-        this.hotelStayDtoCards.forEach(hotelStayDto => {
-            const hotelStay = `
-                    <div class="package-info col-12" >
-                      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-                      <div class="form-group">
-                        <label for="hotelPackageType">Hotel Stay Start</label>
-                        <input type="text" class="form-control mt-1" value="${hotelStayDto.hotelStayStartDate}" readonly>
-                      </div>
-                    </div>
-                        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-                          <div class="form-group">
-                            <label for="hotelRoomType">Hotel Room type</label>
-                            <input type="text" class="form-control mt-1" id="hotelRoomType" value="${hotelStayDto.hotelStayEndDate}">
-                          </div>
-                        </div>
-                    </div>
-                `;
-            packageInfoElement.html(hotelStay);
-        });
-    }
 
     getAllHotels() {
         $.ajax({
@@ -386,7 +381,36 @@ export class DashboardController {
     }
 
     loadHotelStays() {
-
+        const hotelStaysEl = $(`#hotelStays`);
+        hotelStaysEl.html('');
+        this.hotelStayDtoCards.forEach(hotelStayDto => {
+            const hotelStay = `
+              <div class="hotelStay bg-light m-3" id="${hotelStayDto.hotelStayOrderNumber}">
+                <h4>Hotel Stay Order : ${hotelStayDto.hotelStayOrderNumber}</h4>
+                <div class="row">
+                      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+                          <div class="form-group">
+                            <label for="hotelPackageType">Hotel Stay Start</label>
+                            <input type="text" class="form-control mt-1" value="${hotelStayDto.hotelStayStartDate}" readonly>
+                          </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+                          <div class="form-group">
+                            <label for="hotelRoomType">Hotel Room type</label>
+                            <input type="text" class="form-control mt-1" id="hotelRoomType" value="${hotelStayDto.hotelStayEndDate}" readonly>
+                          </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+                          <div class="form-group">
+                            <label for="hotelPrice">Hotel Stay Cost</label>
+                            <input type="text" class="form-control mt-1" id="hotelPrice" value="${hotelStayDto.hotelStayTotalCost}" readonly>
+                          </div>
+                      </div>
+                </div>
+            </div>`;
+            hotelStaysEl.append(hotelStay);
+        });
+        console.log(this.hotelStayDtoCards);
     }
 }
 

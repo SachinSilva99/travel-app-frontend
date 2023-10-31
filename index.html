@@ -95,15 +95,42 @@
         <div class="col-3 m-3">
           <div id="package-details"></div>
         </div>
-        <div class="col-lg-3 col-md-6 col-12 m-3 mb-5">
-          <div class="form-group">
-            <label for="isWithGuide">Do you need a guide?</label>
-            <select id="isWithGuide" class="form-select" aria-label="Default select example">
-              <option value="true">Yes</option>
-              <option selected value="false">No</option>
-            </select>
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-12 m-3 mb-5">
+            <div class="form-group">
+              <label for="isWithGuide">Do you need a guide?</label>
+              <select id="isWithGuide" class="form-select" aria-label="Default select example">
+                <option value="true">Yes</option>
+                <option selected value="false">No</option>
+              </select>
+            </div>
           </div>
+            <div class="guideSection col-lg-3 col-md-6 col-12 m-3 mb-5">
+              <div class="form-group">
+                <label for="guideId">Pick your guide</label>
+                <select id="guideId" class="form-select" aria-label="Default select example">
+                  <option value="">Guide 01</option>
+                  <option value="">Guide 02</option>
+                  <option value="">Guide 03</option>
+                  <option value="">Guide 04</option>
+                  <option value="">Guide 05</option>
+                </select>
+              </div>
+            </div>
+            <div class="guideSection col-lg-3 col-md-6 col-12 m-3 mb-5">
+              <div class="form-group">
+                <label for="test">Pick your guide</label>
+                <select id="test" class="form-select" aria-label="Default select example">
+                  <option value="">Guide 01</option>
+                  <option value="">Guide 02</option>
+                  <option value="">Guide 03</option>
+                  <option value="">Guide 04</option>
+                  <option value="">Guide 05</option>
+                </select>
+              </div>
+            </div>
         </div>
+
         <div class="col-3 m-3">
           <div id="guide-area"></div>
         </div>
@@ -140,7 +167,7 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
             <div class="form-group">
-              <label for="lat">Hotel Stay lat </label>
+              <label for="lat">Hotel Stay lat</label>
               <input type="text" class="form-control mt-1 hotelStayStartDate" id="lat" readonly>
             </div>
           </div>
@@ -225,12 +252,11 @@
           </div>
           <div class="col col-md-12">
             <button id="addHotelStay" class="btn btn-primary col-lg-2 col-md-3 col-3 m-3">Add Hotel Stay</button>
-            <button id="resetHotelStays" class="btn btn-dark col-lg-2 col-md-3 col-3 m-3">Reset Hotel Stays</button>
+            <button id="resetHotelStaysBtn" class="btn btn-dark col-lg-2 col-md-3 col-3 m-3">Reset Hotel Stays</button>
           </div>
         </div>
       </div>
       <div class="container" id="hotelStays">
-
       </div>
     </div>
   </div>

@@ -91,21 +91,20 @@ export class HotelsController {
             hotelPackageDtos.forEach(hotelPackage => {
                 selectOptions += `<option value="${hotelPackage.hotelPackageId}">${hotelPackage.hotelPackageId}</option>`;
             });
+            let images = ``;
+            hotel.hotelImageDTOS.forEach(hotelImageDto => {
+                images += `
+                   <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
+                      <img class="hotelImage" src="${`data:image/**;base64,${hotelImageDto.hotelImgValue}`}">
+                   </div>`
+            });
             let hotelHtml = `
                      <div class="col-12 bg-light m-5 hotel" id="${hotel.hotelId}">
-<!--          <h2>My Hotel</h2>-->
           <h5 class="card-title">${hotel.hotelName}</h5>
           <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
-              <img class="hotelImage" src="${`data:image/**;base64,${hotel.hotelImageDTOS.at(0).hotelImgValue}`}">
+            ${images}
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
-              <img class="hotelImage" src="images/maxresdefault.jpg">
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
-              <img class="hotelImage " src="images/photo8jpg.jpg">
-            </div>
-            <div class="row"></div>
+            <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
               <div class="form-group">
                 <label for="hotelId">Hotel Id </label>
@@ -178,13 +177,12 @@ export class HotelsController {
                 </select>
               </div>
             </div>
-       
                 <div class="package-info">
             </div>
             </div>
-         
-      
           </div>
+            </div>
+            
         </div> `;
             innerHtml += hotelHtml;
         });
