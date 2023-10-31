@@ -19,6 +19,8 @@ export class VehicleController {
         this.vehicleNoOfSeatsEl = $('#vehicleNoOfSeats');
         this.vehicleIsHybridEl = $('#vehicleIsHybrid');
         this.vehicleTransmissionEl = $('#vehicleTransmission');
+        this.vehicleFeeForOneDay100kmEl = $('#vehicleFeeForOneDay100km');//
+        this.vehicleFeeForExtra1kmEl = $('#vehicleFeeForExtra1km');//
         this.vehicleRemarksEl = $('#vehicleRemarks');
         this.vehicleDriverNameEl = $('#vehicleDriverName');
         this.vehicleDriverContactEl = $('#vehicleDriverContact');
@@ -85,6 +87,8 @@ export class VehicleController {
         const vehicleRemarks = this.vehicleRemarksEl.val();
         const vehicleDriverName = this.vehicleDriverNameEl.val();
         const vehicleDriverContact = this.vehicleDriverContactEl.val();
+        const vehicleFeeForOneDay100km = this.vehicleFeeForOneDay100kmEl.val();
+        const vehicleFeeForExtra1km = this.vehicleFeeForExtra1kmEl.val();
         const vehicleMainImage = this.vehicleMainImageEl[0].files[0];
         const vehicleImgFront = this.vehicleImgFrontEl[0].files[0];
         const vehicleImgBack = this.vehicleImgBackEl[0].files[0];
@@ -102,7 +106,10 @@ export class VehicleController {
             vehicleTransmission,
             vehicleRemarks,
             vehicleDriverName,
-            vehicleDriverContact);
+            vehicleDriverContact,
+            vehicleFeeForOneDay100km,
+            vehicleFeeForExtra1km
+        );
 
         const formData = new FormData();
         const jsonDTO = JSON.stringify(dto);
@@ -150,6 +157,8 @@ export class VehicleController {
         const vehicleRemarks = this.vehicleRemarksEl.val();
         const vehicleDriverName = this.vehicleDriverNameEl.val();
         const vehicleDriverContact = this.vehicleDriverContactEl.val();
+        const vehicleFeeForOneDay100km = this.vehicleFeeForOneDay100kmEl.val();
+        const vehicleFeeForExtra1km = this.vehicleFeeForExtra1kmEl.val();
         const vehicleMainImage = this.vehicleMainImageEl[0].files[0];
         const vehicleImgFront = this.vehicleImgFrontEl[0].files[0];
         const vehicleImgBack = this.vehicleImgBackEl[0].files[0];
@@ -168,7 +177,9 @@ export class VehicleController {
             vehicleTransmission,
             vehicleRemarks,
             vehicleDriverName,
-            vehicleDriverContact);
+            vehicleDriverContact,
+            vehicleFeeForOneDay100km,
+            vehicleFeeForExtra1km);
 
         const formData = new FormData();
         const jsonDTO = JSON.stringify(dto);
@@ -270,6 +281,8 @@ export class VehicleController {
         this.vehicleImgFrontEl.val('');
         this.vehicleImgFrontInteriorEl.val('');
         this.vehicleImgBackInteriorEl.val('');
+        this.vehicleFeeForOneDay100kmEl.val(0);
+        this.vehicleFeeForExtra1kmEl.val(0);
         this.vehicleMainPicSectionEl.css('display', 'none');
         this.vehicleFrontPicSectionEl.css('display', 'none');
         this.vehicleBackPicSectionEl.css('display', 'none');
@@ -300,7 +313,8 @@ export class VehicleController {
         this.vehicleRemarksEl.val(vehicle.vehicleRemarks);
         this.vehicleDriverNameEl.val(vehicle.vehicleDriverName);
         this.vehicleDriverContactEl.val(vehicle.vehicleDriverContact);
-
+        this.vehicleFeeForOneDay100kmEl.val(vehicle.feeForOneDay100km);
+        this.vehicleFeeForExtra1kmEl.val(vehicle.feeForExtra1km);
 
         this.vehicleMainPicEl.attr('src', `data:image/**;base64,${vehicle.vehicleMainImage}`);
 

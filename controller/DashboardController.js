@@ -334,13 +334,12 @@ export class DashboardController {
     clearFields() {
         this.latEl.val('');
         this.lngEl.val('');
-
         this.hotelStayHotelIdEl.val('');
-        this.hotelStayCostMainEl.val('');
         $("#hotelStayHotel option:not(:first-child)").remove();
         $("#hotelStayHotelPackage option:not(:first-child)").remove();
         this.hotelStayHotelPackageIdEl.val('');
         this.hotelStayHotelPackageTypeEl.val('');
+        this.hotelStayCostMainEl.val(0);
         this.hotelStayHotelPackageRoomTypeEl.val('');
     }
 

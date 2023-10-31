@@ -1,5 +1,10 @@
 export class VehicleDTO {
-    constructor(vehicleBrand, vehicleName, vehicleCategory, vehicleFuelType, vehicleFuelConsumption, vehicleIsHybrid, vehicleNoOfSeats, vehicleType, vehicleTransmission, vehicleRemarks, vehicleDriverName, vehicleDriverContact) {
+    constructor(
+        vehicleBrand, vehicleName, vehicleCategory, vehicleFuelType, vehicleFuelConsumption, vehicleIsHybrid,
+        vehicleNoOfSeats, vehicleType, vehicleTransmission, vehicleRemarks, vehicleDriverName, vehicleDriverContact,
+        feeForOneDay100km,
+        feeForExtra1km
+    ) {
         this.vehicleId = null;
         this.vehicleName = vehicleName;
         this.vehicleBrand = vehicleBrand;
@@ -18,5 +23,7 @@ export class VehicleDTO {
         this.vehicleImgBack = null;
         this.vehicleImgFrontInterior = null;
         this.vehicleImgBackInterior = null;
+        this.feeForOneDay100km = feeForOneDay100km;
+        this.feeForExtra1km = feeForExtra1km;
     }
 }
