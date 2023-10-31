@@ -8,7 +8,7 @@ export class HotelStayDtoCard {
         hotelStayHotelPackageId,
         location,
         lat,
-        lan,
+        lng,
         hotelStayHotelPackageType,
         hotelStayHotelPackageRoomType
     ) {
@@ -20,7 +20,7 @@ export class HotelStayDtoCard {
         this.hotelStayHotelPackageId = hotelStayHotelPackageId;
         this.location = location;
         this.lat = lat;
-        this.lan = lan;
+        this.lng = lng;
         this.hotelStayHotelPackageType = hotelStayHotelPackageType;
         this.hotelStayHotelPackageRoomType = hotelStayHotelPackageRoomType;
     }

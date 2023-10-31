@@ -45,6 +45,6 @@ a {
 .guideSection{
     display: none;
 }
-#placeOrderSection{
+#placeOrderSection, #hotelStayMain{
     display: none;
 }

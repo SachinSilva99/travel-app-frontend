@@ -1,7 +1,7 @@
 import {StandardResponse} from "../hotel-admin/model/StandardResponse.js";
 import {HotelStayDtoCard} from "../model/HotelStayDtoCard.js";
-import {HotelStayDto} from "../model/HotelStayDto";
-import {TravelDto} from "../model/TravelDto";
+import {HotelStayDto} from "../model/HotelStayDto.js";
+import {TravelDto} from "../model/TravelDto.js";
 
 export class DashboardController {
 
@@ -107,13 +107,14 @@ export class DashboardController {
         const hotelStayDtos = [];
         this.hotelStayDtoCards.forEach(dtoCard => {
             const hotelStayDto = new HotelStayDto(
+                dtoCard.hotelStayOrderNumber,
                 dtoCard.hotelStayStartDate,
                 dtoCard.hotelStayEndDate,
                 dtoCard.hotelStayTotalCost,
-                dtoCard.lat,
-                dtoCard.lng,
                 dtoCard.hotelStayHotelId,
-                dtoCard.hotelStayHotelPackageId
+                dtoCard.hotelStayHotelPackageId,
+                dtoCard.lat,
+                dtoCard.lng
             );
             hotelStayDtos.push(hotelStayDto);
         });
@@ -133,7 +134,7 @@ export class DashboardController {
             'eiwufhwufhuh'
         );
         const bankSlipImg = this.bankSlipEl[0].files[0];
-
+        console.log(travelDto);
         const formData = new FormData();
         const jsonDTO = JSON.stringify(travelDto);
         const blob = new Blob([jsonDTO], {type: 'application/json'});
@@ -246,6 +247,7 @@ export class DashboardController {
         this.hotelStayDtoCards = [];
     }
 
+//
     hotelStayHotelPackageElOnChange(e) {
         const packageDto = this.hotelStaySelectedHotel
             .hotelPackageDTOS
@@ -258,11 +260,18 @@ export class DashboardController {
             this.hotelStayCostMainEl.val('');
             return;
         }
+        const startDate = new Date(this.currentEndDate);
+        const endDate = new Date(this.hotelStayEndDateMainEl.val());
+
+        const timeDiff = endDate - startDate;
+
+        let daysDifference = Math.ceil(timeDiff / (1000 * 60 * 60 * 24) + 1);
         this.hotelStayHotelPackageIdEl.val(packageDto.hotelPackageId);
         this.hotelStayHotelPackageTypeEl.val(packageDto.hotelPackageType);
         this.hotelStayHotelPackageRoomTypeEl.val(packageDto.hotelPackageRoomType);
         this.hotelStayHotelPackagePriceEl.val(packageDto.hotelPackagePrice);
-        this.hotelStayCostMainEl.val(packageDto.hotelPackagePrice);
+        const total = packageDto.hotelPackagePrice * daysDifference;
+        this.hotelStayCostMainEl.val(total);
     }
 
     latElOnChange() {
@@ -354,7 +363,6 @@ export class DashboardController {
         const hotel = this.hotels.find(hotel => hotel.hotelId === hotelId);
         this.hotelStaySelectedHotel = hotel;
 
-
         hotel.hotelPackageDTOS.forEach(pkgDto => {
             const option = $("<option></option>")
                 .attr("value", pkgDto.hotelPackageId)
@@ -419,6 +427,7 @@ export class DashboardController {
             this.resultEl.text(`Trip Number of days: ${diffDays}`);
             this.noOfDaysRemainingEl.html(this.tripNoDaysRemaining);
             this.addHotelStayBtnEl.prop("disabled", false);
+            $('#hotelStayMain').show();
             this.hotelStayStartDateMainEl.val(this.tripStartDateEl.val());
             this.hotelStayStartDateMainEl.prop('disabled', true);
             this.currentEndDate = this.tripStartDate;
@@ -455,13 +464,6 @@ export class DashboardController {
 
         // this.loadHotelPackages();
         this.noOfDaysRemainingEl.html(this.tripNoDaysRemaining);
-        //setting the starting date of new hotel stay with selected previous date
-        const currentDate = this.settingStartDate(endDate);
-        this.currentEndDate = currentDate;
-
-        //setting hotel end date
-        this.hotelStayEndDateMainEl.attr("min", currentDate.toISOString().split('T')[0]);
-        this.hotelStayEndDateMainEl.attr("max", new Date(this.tripEndDateEl.val()).toISOString().split('T')[0]);
 
 
         const hotelStayEndDate = this.hotelStayEndDateMainEl.val();
@@ -469,7 +471,7 @@ export class DashboardController {
         const lat = this.latEl.val();
         const lng = this.lngEl.val();
         const hotelStayHotelId = this.hotelStayHotelIdEl.val();
-        const hotelStayTotalCost = this.hotelStayCostMainEl.val();
+        const hotelStayTotalCost = parseFloat(this.hotelStayCostMainEl.val());
         const hotelStayHotelPackageId = this.hotelStayHotelPackageIdEl.val();
         const hotelStayHotelPackageType = this.hotelStayHotelPackageTypeEl.val();
         const hotelStayHotelPackageRoomType = this.hotelStayHotelPackageRoomTypeEl.val();
@@ -489,6 +491,13 @@ export class DashboardController {
             hotelStayHotelPackageRoomType
         );
         this.hotelStayDtoCards.push(hotelStayDtoCard);
+        //setting the starting date of new hotel stay with selected previous date
+        const currentDate = this.settingStartDate(endDate);
+        this.currentEndDate = currentDate;
+
+        //setting hotel end date
+        this.hotelStayEndDateMainEl.attr("min", currentDate.toISOString().split('T')[0]);
+        this.hotelStayEndDateMainEl.attr("max", new Date(this.tripEndDateEl.val()).toISOString().split('T')[0]);
         const hotel = this.hotels.find(hotel => hotel.hotelId === hotelStayHotelId);
         const totalKms = this.calculateDistance(hotel.hotelLocationLat, hotel.hotelLocationLng, this.lastLat, this.lastLng);
         this.travelKms += totalKms;
@@ -511,19 +520,19 @@ export class DashboardController {
         this.placeOrderSectionEl.show();
         let netTotal = 0;
         const kmsFreeForTrip = this.tripNoDays * 100;
-        let totalCostForVehicle = kmsFreeForTrip * this.feeForOneDay100kmEl;
+        let totalCostForVehicle = this.tripNoDays * parseFloat(this.feeForOneDay100kmEl.val());
 
         if (this.travelKms > kmsFreeForTrip) {
             const extraKms = this.travelKms - kmsFreeForTrip;
-            const extraCost = this.feeForExtra1kmEl * extraKms;
+            const extraCost = parseFloat(this.feeForExtra1kmEl.val()) * extraKms;
             totalCostForVehicle += extraCost;
         }
         netTotal += totalCostForVehicle;
         if (this.userSelectedGuide !== null) {
-            netTotal += this.guideManDayValueEl.val();
+            netTotal += parseFloat(this.guideManDayValueEl.val());
         }
         this.hotelStayDtoCards.forEach(dtoCard => {
-            netTotal += dtoCard.hotelStayTotalCost;
+            netTotal += parseFloat(dtoCard.hotelStayTotalCost);
         });
         this.totalCostEl.text(netTotal);
     }

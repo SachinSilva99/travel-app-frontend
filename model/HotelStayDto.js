@@ -1,14 +1,15 @@
 export class HotelStayDto {
     constructor(
+        hotelStayOrderNumber,
         hotelStayStartDate,
         hotelStayEndDate,
         hotelStayTotalCost,
         hotelStayHotelId,
         hotelStayHotelPackageId,
-        location,
         lat,
-        lan
+        lng
     ) {
+        this.hotelStayOrderNumber = hotelStayOrderNumber;
         this.hotelStayId = null;
         this.travelId = null;
         this.hotelStayStartDate = hotelStayStartDate;
@@ -16,8 +17,8 @@ export class HotelStayDto {
         this.hotelStayTotalCost = hotelStayTotalCost;
         this.hotelStayHotelId = hotelStayHotelId;
         this.hotelStayHotelPackageId = hotelStayHotelPackageId;
-        this.location = location;
+        this.location = null;
         this.lat = lat;
-        this.lan = lan;
+        this.lng = lng;
     }
 }
