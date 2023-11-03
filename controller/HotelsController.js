@@ -3,7 +3,7 @@ import {StandardResponse} from "../hotel-admin/model/StandardResponse.js";
 export class HotelsController {
     constructor() {
         this.hotels = [];
-        this.normalHotelApiUrl = "http://localhost:8092/hotelservice/api/v1/getAll";
+        this.normalHotelApiUrl = "http://localhost:8092/hotelservice/api/v1/gethotels";
         this.getAllHotels();
         $('#hotelsContainer').on('click', '.hotel select', this.clickOnHotel.bind(this));
 

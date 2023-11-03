@@ -8,6 +8,11 @@ body {
     color: #96C2DB;
 }
 
+#login,#logout  {
+    display: none;
+}
+
+
 .main-color-bg {
     background-color: #96C2DB !important;
 }
@@ -38,13 +43,16 @@ a {
     height: 100%;
     max-height: 40vh;
 }
+
 #map {
     height: 400px;
-    width:65vw;
+    width: 65vw;
 }
-.guideSection{
+
+.guideSection {
     display: none;
 }
-#placeOrderSection, #hotelStayMain{
+
+#placeOrderSection, #hotelStayMain {
     display: none;
 }

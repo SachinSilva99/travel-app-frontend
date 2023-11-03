@@ -23,7 +23,7 @@ export class DashboardController {
         this.vehicleApiUrl = "http://localhost:8095/vehicleservice/api/v1/vehicles";
         this.getAllVehicles();
         this.vehicles = [];
-        this.normalHotelApiUrl = "http://localhost:8092/hotelservice/api/v1/getAll";
+        this.normalHotelApiUrl = "http://localhost:8092/hotelservice/api/v1/gethotels";
         this.guideApiUrl = "http://localhost:8097/guideservice/api/v1/guides";
         this.guides = [];
         this.getAllHotels();
@@ -102,7 +102,6 @@ export class DashboardController {
     }
 
     placeOrder() {
-        // :TODO complete
         const today = new Date();
         const hotelStayDtos = [];
         this.hotelStayDtoCards.forEach(dtoCard => {
@@ -123,7 +122,7 @@ export class DashboardController {
             this.tripEndDate,
             this.noOfAdultsEl.val(),
             this.noOfChildrenEl.val(),
-            this.noOfAdultsEl.val() + this.noOfChildrenEl.val(),
+            parseFloat(this.noOfAdultsEl.val()) + parseFloat(this.noOfChildrenEl.val()),
             this.isWithPetsEl.val(),
             null, //bank slip
             this.totalCostEl.text(),
@@ -131,10 +130,9 @@ export class DashboardController {
             hotelStayDtos,
             this.vehicleIdEl.val(),
             this.packageSelectEl.val(),
-            'eiwufhwufhuh'
+            'eiwufhwufhuh' //:TODO need to implement userid here
         );
         const bankSlipImg = this.bankSlipEl[0].files[0];
-        console.log(travelDto);
         const formData = new FormData();
         const jsonDTO = JSON.stringify(travelDto);
         const blob = new Blob([jsonDTO], {type: 'application/json'});
@@ -245,6 +243,27 @@ export class DashboardController {
     resetHotels() {
         this.clearFields();
         this.hotelStayDtoCards = [];
+        this.loadHotelStays();
+        this.latEl.val('');
+        this.lngEl.val('');
+        this.hotelStayHotelEl.html('');
+        const option = $("<option></option>")
+            .attr("value", '')
+            .attr("id", '')
+            .text('select a hotel');
+        this.hotelStayHotelEl.append(option);
+        this.hotelStayHotelIdEl.val('');
+        this.hotelStayHotelPackageIdEl.val('');
+        this.hotelStayHotelPackageTypeEl.val('');
+        this.hotelStayHotelPackageRoomTypeEl.val('');
+        this.hotelStayHotelPackagePriceEl.val('');
+        this.hotelStayCostMainEl.val(0);
+        this.hotelStayHotelPackageEl.html('');
+        this.hotelStayStartDateMainEl.val(this.tripStartDateEl.val());
+        this.hotelStayEndDateMainEl.val('');
+        this.travelKms = 0;
+        $('#totalKms').text(this.travelKms);
+        this.placeOrderSectionEl.hide();
     }
 
 //
@@ -257,7 +276,7 @@ export class DashboardController {
             this.hotelStayHotelPackageTypeEl.val('');
             this.hotelStayHotelPackageRoomTypeEl.val('');
             this.hotelStayHotelPackagePriceEl.val('');
-            this.hotelStayCostMainEl.val('');
+            this.hotelStayCostMainEl.val(0);
             return;
         }
         const startDate = new Date(this.currentEndDate);
@@ -270,12 +289,19 @@ export class DashboardController {
         this.hotelStayHotelPackageTypeEl.val(packageDto.hotelPackageType);
         this.hotelStayHotelPackageRoomTypeEl.val(packageDto.hotelPackageRoomType);
         this.hotelStayHotelPackagePriceEl.val(packageDto.hotelPackagePrice);
-        const total = packageDto.hotelPackagePrice * daysDifference;
+        const total = parseFloat(packageDto.hotelPackagePrice) * daysDifference;
+        console.log(total);
         this.hotelStayCostMainEl.val(total);
     }
 
     latElOnChange() {
         this.getAllHotels();
+        this.hotelStayHotelEl.html('');
+        const option = $("<option></option>")
+            .attr("value", '')
+            .attr("id", '')
+            .text('select a hotel');
+        this.hotelStayHotelEl.append(option);
         this.hotels = this.hotels.filter(hotel => {
             const distance = this.calculateDistance(this.lat, this.lng, hotel.hotelLocationLat, hotel.hotelLocationLng);
             const selectedPackage = this.packageSelectEl.val();
@@ -297,14 +323,6 @@ export class DashboardController {
                 .text(hotel.hotelName);
             this.hotelStayHotelEl.append(option);
         });
-        if (this.hotels.length === 0) {
-            this.hotelStayHotelEl.html('');
-            const option = $("<option></option>")
-                .attr("value", '')
-                .attr("id", '')
-                .text('select a hotel');
-            this.hotelStayHotelEl.append(option);
-        }
 
     }
 
@@ -518,6 +536,10 @@ export class DashboardController {
 
     loadTotal() {
         this.placeOrderSectionEl.show();
+        let comeBackKms = this.calculateDistance(this.lastLat, this.lastLng, this.nextTravelLat, this.nextTravelLng);
+        this.travelKms += comeBackKms;
+        $('#totalKms').text(this.travelKms);
+
         let netTotal = 0;
         const kmsFreeForTrip = this.tripNoDays * 100;
         let totalCostForVehicle = this.tripNoDays * parseFloat(this.feeForOneDay100kmEl.val());
@@ -549,6 +571,8 @@ export class DashboardController {
         this.hotelStayCostMainEl.val(0);
         this.hotelStayHotelPackagePriceEl.val(0);
         this.hotelStayHotelPackageRoomTypeEl.val('');
+        this.hotelStayEndDateMainEl.val('')
+
     }
 
     settingStartDate(endDate) {
@@ -602,7 +626,13 @@ export class DashboardController {
                       </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
                           <div class="form-group">
-                            <label for="hotelRoomType">Hotel Room type</label>
+                            <label for="hotelPackageType">Hotel Stay Hotel Name</label>
+                            <input type="text" class="form-control mt-1" value="${hotelStayDto.hotelStayHotelId}" readonly>
+                          </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+                          <div class="form-group">
+                            <label for="hotelRoomType">Hotel Room End</label>
                             <input type="text" class="form-control mt-1" id="hotelRoomType" value="${hotelStayDto.hotelStayEndDate}" readonly>
                           </div>
                       </div>
