@@ -9,6 +9,7 @@ export class VehicleController {
         $('#addBtn').click(this.createVehicle.bind(this));
         $('#updateBtn').click(this.updateVehicle.bind(this));
         $('#deleteYesBtn').click(this.deleteVehicle.bind(this));
+        $('#logout').click(this.logout.bind(this));
         this.vehicleIdEl = $('#vehicleId');
         this.vehicleNameEl = $('#vehicleName');
         this.vehicleBrandEl = $('#vehicleBrand');
@@ -52,6 +53,23 @@ export class VehicleController {
         this.vehicleSearchEl.on('keyup', this.searchVehicles.bind(this));
     }
 
+
+    logout() {
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8090/userservice/api/v1/auth/logout",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            success: () => {
+                window.location.href = '../Login/index.html';
+            },
+            error: () => {
+                window.location.href = '../Login/index.html';
+            }
+        });
+    }
+
     deleteVehicle() {
         console.log(this.selectedVehicle.vehicleId);
         const vehicleId = this.selectedVehicle.vehicleId;
@@ -60,13 +78,16 @@ export class VehicleController {
         $.ajax({
             url: this.vehicleApiUrl + '/' + vehicleId,
             type: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('vehicleAdminAccessToken')}`
+            },
             success: () => {
                 $(`#${vehicleId}`).remove();
                 this.selectedImageId = null;
                 console.log('deleted');
             },
             error: function () {
-                alert("Failed to delete guide");
+                alert("Failed to delete vehicle");
             }
         });
     }
@@ -139,6 +160,9 @@ export class VehicleController {
             data: formData,
             processData: false,
             contentType: false,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('vehicleAdminAccessToken')}`
+            },
             success: (response) => {
                 console.log("Vehicle saved successfully. Vehicle ID: " + response.data);
                 this.clearInputFields();
@@ -226,8 +250,10 @@ export class VehicleController {
             data: formData,
             processData: false,
             contentType: false,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('vehicleAdminAccessToken')}`
+            },
             success: () => {
-                console.log("Vehicle updated successfully");
                 this.clearInputFields();
                 this.getAllVehicles();
                 $("#vehicleMainPicSection, #vehicleFrontPicSection,#vehicleBackPicSection,#vehicleBackInteriorPicSection, #vehicleFrontInteriorPicSection").hide();
@@ -243,6 +269,9 @@ export class VehicleController {
             url: this.vehicleApiUrl,
             type: "GET",
             dataType: "json",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('vehicleAdminAccessToken')}`
+            },
             success: (res) => {
                 const standardResponse = new StandardResponse(res.code, res.msg, res.data);
                 this.vehicles = standardResponse.data;
@@ -250,7 +279,8 @@ export class VehicleController {
                 this.loadData(standardResponse.data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log("Error: " + errorThrown);
+                alert("you need to login");
+                window.location.href = '../Login/index.html';
             }
         });
     }

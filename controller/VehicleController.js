@@ -48,7 +48,6 @@ export class VehicleController {
               <img class="hotelImage" src="${`data:image/**;base64,${vehicle.vehicleImgBackInterior}`}">
            </div>
         </div>
-          
              <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
                  <div class="form-group">
                   <label for="vehicleId">Vehicle Id </label>

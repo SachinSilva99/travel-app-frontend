@@ -7,6 +7,7 @@ export class DashboardController {
 
 
     constructor() {
+
         this.lastLat = null;
         this.lastLng = null;
         this.nextTravelLat = 6.584034509543009;
@@ -20,7 +21,7 @@ export class DashboardController {
         this.hotelStayDtoCards = [];
         this.hotels = [];
         this.travelIdUrl = 'http://localhost:8000/travelservice/api/v1/travels';
-        this.vehicleApiUrl = "http://localhost:8095/vehicleservice/api/v1/vehicles";
+        this.vehicleApiUrl = "http://localhost:8095/vehicleservice/api/v1/getvehicles";
         this.getAllVehicles();
         this.vehicles = [];
         this.normalHotelApiUrl = "http://localhost:8092/hotelservice/api/v1/gethotels";
@@ -29,6 +30,8 @@ export class DashboardController {
         this.getAllHotels();
         this.currentEndDate = null;
         this.tripStartDateEl = $("#tripStartDate");
+        $("#login").click(this.loginBtnOnClick.bind(this));
+        $("#logout").click(this.logoutBtnOnClick.bind(this));
         this.placeOrderSectionEl = $("#placeOrderSection");
         this.totalCostEl = $("#totalCost");
         $('#placeTravelBtn').on('click', this.placeOrder.bind(this));
@@ -100,7 +103,23 @@ export class DashboardController {
         this.getAllVehicles();
 
     }
-
+    loginBtnOnClick(){
+        window.location.href = './Login/index.html';
+    }
+    logoutBtnOnClick(){
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8090/userservice/api/v1/auth/logout",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            success: (res) => {
+                window.location.href = './Login/index.html';
+            },
+            error: (error) => {
+            }
+        });
+    }
     placeOrder() {
         const today = new Date();
         const hotelStayDtos = [];
@@ -144,6 +163,9 @@ export class DashboardController {
             data: formData,
             processData: false,
             contentType: false,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('registeredCustomerAccessToken')}`
+            },
             success: (response) => {
                 console.log("Travel saved successfully. Travel ID: " + response.data);
             },

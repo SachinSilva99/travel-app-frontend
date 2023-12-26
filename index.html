@@ -56,7 +56,7 @@
         <li class="nav-item">
           <a class="nav-link mx-2 text-uppercase active" aria-current="page" href="#home">Home</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" id="manageTravelsNavItem">
           <a class="nav-link mx-2 text-uppercase" href="#manageTravels">Manage Travels</a>
         </li>
         <li class="nav-item">
@@ -82,301 +82,324 @@
   </div>
 </nav>
 <main>
-  <div id="home">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-12 m-3 mb-5">
-          <p>Select your preferred package</p>
-          <select id="package-select" class="form-select" aria-label="Default select example">
-            <option value="" selected>Select a Travel Package</option>
-            <option value="REGULAR">Regular</option>
-            <option value="MID_LEVEL">Mid-Level</option>
-            <option value="LUXURY">Luxury</option>
-            <option value="SUPER_LUXURY">Super Luxury</option>
-          </select>
-        </div>
-        <div class="col-3 m-3">
-          <div id="package-details"></div>
+  <div id="loggedView">
+    <div id="home">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-12 m-3 mb-5">
+            <p>Select your preferred package</p>
+            <select id="package-select" class="form-select" aria-label="Default select example">
+              <option value="" selected>Select a Travel Package</option>
+              <option value="REGULAR">Regular</option>
+              <option value="MID_LEVEL">Mid-Level</option>
+              <option value="LUXURY">Luxury</option>
+              <option value="SUPER_LUXURY">Super Luxury</option>
+            </select>
+          </div>
+          <div class="col-3 m-3">
+            <div id="package-details"></div>
+          </div>
+          <div class="row">
+            <div class="col-lg-3 col-md-6 col-12 m-3 mb-2">
+              <div class="form-group">
+                <label for="isWithGuide">Do you need a guide?</label>
+                <select id="isWithGuide" class="form-select" aria-label="Default select example">
+                  <option value="true">Yes</option>
+                  <option selected value="false">No</option>
+                </select>
+              </div>
+            </div>
+            <div class="guideSection col-lg-7 col-md-12 col-12 m-3 mb-2">
+              <div class="form-group">
+                <label for="guideId">Pick your guide</label>
+                <select id="guideId" class="form-select" aria-label="Default select example">
+                  <option value="">Select Guide</option>
+                </select>
+              </div>
+            </div>
+            <div class="guideSection col-lg-3 col-md-6 col-12 m-3 mb-2">
+              <div class="form-group">
+                <label for="guideManDayValue">Guide Man Value LKR</label>
+                <input type="number" class="form-control mt-1" id="guideManDayValue" value="0" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="col-3 m-3">
+            <div id="guide-area"></div>
+          </div>
+          <hr>
         </div>
         <div class="row">
-          <div class="col-lg-3 col-md-6 col-12 m-3 mb-2">
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
             <div class="form-group">
-              <label for="isWithGuide">Do you need a guide?</label>
-              <select id="isWithGuide" class="form-select" aria-label="Default select example">
+              <label for="noOfAdults">Number of Adults</label>
+              <input type="number" class="form-control mt-1 " id="noOfAdults" value="0" min="1" max="50">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="noOfChildren">Number of children</label>
+              <input type="number" class="form-control mt-1" id="noOfChildren" value="0" min="0" max="50">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="isWithPets">Is with pets?</label>
+              <select type="number" class="form-control mt-1" id="isWithPets">
+                <option value="false" selected>No</option>
                 <option value="true">Yes</option>
-                <option selected value="false">No</option>
               </select>
             </div>
           </div>
-          <div class="guideSection col-lg-7 col-md-12 col-12 m-3 mb-2">
-            <div class="form-group">
-              <label for="guideId">Pick your guide</label>
-              <select id="guideId" class="form-select" aria-label="Default select example">
-                <option value="">Select Guide</option>
-              </select>
-            </div>
-          </div>
-          <div class="guideSection col-lg-3 col-md-6 col-12 m-3 mb-2">
-            <div class="form-group">
-              <label for="guideManDayValue">Guide Man Value LKR</label>
-              <input type="number" class="form-control mt-1" id="guideManDayValue" value="0" readonly>
-            </div>
-          </div>
-        </div>
-        <div class="col-3 m-3">
-          <div id="guide-area"></div>
         </div>
         <hr>
-      </div>
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="noOfAdults">Number of Adults</label>
-            <input type="number" class="form-control mt-1 " id="noOfAdults" value="0" min="1" max="50">
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="noOfChildren">Number of children</label>
-            <input type="number" class="form-control mt-1" id="noOfChildren" value="0" min="0" max="50">
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="isWithPets">Is with pets?</label>
-            <select type="number" class="form-control mt-1" id="isWithPets">
-              <option value="false" selected>No</option>
-              <option value="true">Yes</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="tripStartDate">Trip Start Date</label>
-            <input type="date" class="form-control mt-1" id="tripStartDate">
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="tripEndDate">Trip End Date</label>
-            <input type="date" class="form-control mt-1" id="tripEndDate">
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <p id="result"></p>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="vehicleId">Select a vehicle</label>
-            <select class="form-select" aria-label="Default select example" id="vehicleId">
-              <option selected value="">Select Vehicle</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="feeForExtra1km">feeForExtra1km</label>
-            <input type="number" class="form-control mt-1" id="feeForExtra1km" value="0" readonly>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="feeForOneDay100km">feeForOneDay100km</label>
-            <input type="number" class="form-control mt-1" id="feeForOneDay100km" value="0" readonly>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-          <div class="form-group">
-            <label for="noOfSeats">noOfSeats</label>
-            <input type="number" class="form-control mt-1" id="noOfSeats" value="0" readonly>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <h6 class="col text-start m-3">No of days remaining : <span id="noOfDaysRemaining"></span></h6>
-        <h6 class="col text-start m-3">Total Kms : <span id="totalKms"></span></h6>
-      </div>
-      <div class="container" id="hotelStayMain">
-        <div class="row hotelStayMain">
-          <h3>Hotel Stay</h3>
-          <div class="col-12 mt-4">
-            <label for="map">Pick a location where you travel</label>
-            <div id="map"></div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="lat">Hotel Stay lat</label>
-              <input type="text" class="form-control mt-1 hotelStayStartDate" id="lat" readonly>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="lng">Hotel Stay lng </label>
-              <input type="text" class="form-control mt-1 hotelStayStartDate" id="lng" readonly>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayStartDateMain">Hotel Stay Start Date</label>
-              <input type="date" class="form-control mt-1 hotelStayStartDate" id="hotelStayStartDateMain">
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayEndDateMain">Hotel Stay End Date</label>
-              <input type="date" class="form-control mt-1 hotelStayEndDate" id="hotelStayEndDateMain">
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayLocation">Hotel Stay Location</label>
-              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayLocation" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayHotel">Hotel Stay Hotel Name Select</label>
-              <select class="form-select" aria-label="Default select example" id="hotelStayHotel">
-                <option selected value="">Select hotel</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayHotelId">Hotel Stay Hotel Id</label>
-              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelId" readonly>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayCostMain">Hotel Stay Cost</label>
-              <input type="number" class="form-control mt-1 hotelStayEndDate" id="hotelStayCostMain" readonly value="0">
-            </div>
-          </div>
-          <!--          /////////////////////////////////////-->
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayHotelPackage">Hotel Stay Hotel Package Select</label>
-              <select class="form-select" aria-label="Default select example" id="hotelStayHotelPackage">
-                <option selected value="">Select package</option>
-
-              </select>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayHotelPackageId">Hotel Stay Hotel Package Id</label>
-              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageId" readonly>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayHotelPackagePrice">Hotel Stay Hotel Package Price</label>
-              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackagePrice" readonly>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayHotelPackageType">Hotel Stay Hotel Package Type</label>
-              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageType" readonly>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="hotelStayHotelPackageRoomType">Hotel Stay Hotel Room Type</label>
-              <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageRoomType" readonly>
-            </div>
-          </div>
-          <div class="col col-md-12">
-            <button id="addHotelStay" class="btn btn-primary col-lg-2 col-md-3 col-3 m-3">Add Hotel Stay</button>
-            <button id="resetHotelStaysBtn" class="btn btn-dark col-lg-2 col-md-3 col-3 m-3">Reset Hotel Stays</button>
-          </div>
-        </div>
-      </div>
-      <div class="container" id="hotelStays">
-      </div>
-      <div class="container" id="placeOrderSection">
         <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="tripStartDate">Trip Start Date</label>
+              <input type="date" class="form-control mt-1" id="tripStartDate">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="tripEndDate">Trip End Date</label>
+              <input type="date" class="form-control mt-1" id="tripEndDate">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <p id="result"></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="vehicleId">Select a vehicle</label>
+              <select class="form-select" aria-label="Default select example" id="vehicleId">
+                <option selected value="">Select Vehicle</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="feeForExtra1km">feeForExtra1km</label>
+              <input type="number" class="form-control mt-1" id="feeForExtra1km" value="0" readonly>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="feeForOneDay100km">feeForOneDay100km</label>
+              <input type="number" class="form-control mt-1" id="feeForOneDay100km" value="0" readonly>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+            <div class="form-group">
+              <label for="noOfSeats">noOfSeats</label>
+              <input type="number" class="form-control mt-1" id="noOfSeats" value="0" readonly>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <h6 class="col text-start m-3">No of days remaining : <span id="noOfDaysRemaining"></span></h6>
+          <h6 class="col text-start m-3">Total Kms : <span id="totalKms"></span></h6>
+        </div>
+        <div class="container" id="hotelStayMain">
+          <div class="row hotelStayMain">
+            <h3>Hotel Stay</h3>
+            <div class="col-12 mt-4">
+              <label for="map">Pick a location where you travel</label>
+              <div id="map"></div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="lat">Hotel Stay lat</label>
+                <input type="text" class="form-control mt-1 hotelStayStartDate" id="lat" readonly>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="lng">Hotel Stay lng </label>
+                <input type="text" class="form-control mt-1 hotelStayStartDate" id="lng" readonly>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayStartDateMain">Hotel Stay Start Date</label>
+                <input type="date" class="form-control mt-1 hotelStayStartDate" id="hotelStayStartDateMain">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayEndDateMain">Hotel Stay End Date</label>
+                <input type="date" class="form-control mt-1 hotelStayEndDate" id="hotelStayEndDateMain">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayLocation">Hotel Stay Location</label>
+                <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayLocation" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayHotel">Hotel Stay Hotel Name Select</label>
+                <select class="form-select" aria-label="Default select example" id="hotelStayHotel">
+                  <option selected value="">Select hotel</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayHotelId">Hotel Stay Hotel Id</label>
+                <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelId" readonly>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayCostMain">Hotel Stay Cost</label>
+                <input type="number" class="form-control mt-1 hotelStayEndDate" id="hotelStayCostMain" readonly
+                       value="0">
+              </div>
+            </div>
+            <!--          /////////////////////////////////////-->
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayHotelPackage">Hotel Stay Hotel Package Select</label>
+                <select class="form-select" aria-label="Default select example" id="hotelStayHotelPackage">
+                  <option selected value="">Select package</option>
+
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayHotelPackageId">Hotel Stay Hotel Package Id</label>
+                <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageId" readonly>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayHotelPackagePrice">Hotel Stay Hotel Package Price</label>
+                <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackagePrice" readonly>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayHotelPackageType">Hotel Stay Hotel Package Type</label>
+                <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageType" readonly>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="hotelStayHotelPackageRoomType">Hotel Stay Hotel Room Type</label>
+                <input type="text" class="form-control mt-1 hotelStayEndDate" id="hotelStayHotelPackageRoomType"
+                       readonly>
+              </div>
+            </div>
+            <div class="col col-md-12">
+              <button id="addHotelStay" class="btn btn-primary col-lg-2 col-md-3 col-3 m-3">Add Hotel Stay</button>
+              <button id="resetHotelStaysBtn" class="btn btn-dark col-lg-2 col-md-3 col-3 m-3">Reset Hotel Stays
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="container" id="hotelStays">
+        </div>
+        <div class="container" id="placeOrderSection">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-12 m-4 mt-4">
+              <div class="form-group">
+                <h4>Total cost <span class="custom-text-color" id="totalCost"></span></h4>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+              <div class="form-group">
+                <label for="bankSlip">Bank Slip</label>
+                <input type="file" class="form-control mt-1 hotelStayEndDate" id="bankSlip" readonly>
+              </div>
+            </div>
+          </div>
           <div class="col-lg-3 col-md-6 col-sm-12 m-4 mt-4">
-            <div class="form-group">
-              <h4>Total cost <span class="custom-text-color" id="totalCost"></span></h4>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="form-group">
-              <label for="bankSlip">Bank Slip</label>
-              <input type="file" class="form-control mt-1 hotelStayEndDate" id="bankSlip" readonly>
-            </div>
+            <button id="placeTravelBtn" class="btn btn-success">Place Travel</button>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 m-4 mt-4">
-          <button id="placeTravelBtn" class="btn btn-success">Place Travel</button>
-        </div>
-      </div>
 
-    </div>
-  </div>
-  </div>
-  <div id="hotels">
-    <div class="container">
-      <div class="row">
-        <h1 class="main-color mt-5 mb-5">Hotels</h1>
       </div>
+    </div>
+    <div id="hotels">
       <div class="container">
         <div class="row">
-          <div class="col-md-3">
-            <div class="form-group">
-              <input type="text" class="form-control" id="search" placeholder="Search hotels">
+          <h1 class="main-color mt-5 mb-5">Hotels</h1>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" class="form-control" id="search" placeholder="Search hotels">
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div id="hotelsContainer" class="container  border-black">
-      </div>
-    </div>
-  </div>
-  <div id="manageTravels">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-12 m-3 mb-5">
-          <p>Select your travel</p>
-          <select id="travelSelect" class="form-select" aria-label="Default select example">
-            <option value="" selected>Select your travel</option>
-          </select>
+        <div id="hotelsContainer" class="container  border-black">
         </div>
       </div>
     </div>
-  </div>
-  <div id="vehicles">
-    <div class="container">
-      <div class="row">
-        <h1 class="main-color mt-5 mb-5">Vehicles</h1>
+    <div id="manageTravels">
+      <div class="container">
+        <h1>Select Travel ID</h1>
+        <select id="travelIdSelect" class="form-select col-6">
+
+        </select>
+
+        <div id="travelDetails">
+          <!-- Travel details will be displayed here -->
+        </div>
+
+        <h2>Hotel Stay Details</h2>
+        <table id="hotelStayTable" class="table">
+          <thead>
+          <tr>
+            <th>Order Number</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Total Cost</th>
+            <th>Hotel ID</th>
+            <th>Hotel Package ID</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Hotel stay details will be displayed here -->
+          </tbody>
+        </table>
       </div>
+    </div>
+    <div id="vehicles">
       <div class="container">
         <div class="row">
-          <div class="col-md-3">
-            <div class="form-group">
-              <input type="text" class="form-control" id="searchVehicle" placeholder="Search vehicles">
+          <h1 class="main-color mt-5 mb-5">Vehicles</h1>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" class="form-control" id="searchVehicle" placeholder="Search vehicles">
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div id="vehiclesContainer" class="container  border-black">
-
-
+        <div id="vehiclesContainer" class="container  border-black">
+        </div>
       </div>
     </div>
+    <div id="guides">
+      <h1>guides</h1>
+    </div>
   </div>
-  <div id="guides">
-    <h1>guides</h1>
+  <div id="notLogged">
+    <h1>not logged</h1>
+
   </div>
 </main>
 <script src="./lib/bootstrap-5.3.2-dist/js/bootstrap.min.js"></script>

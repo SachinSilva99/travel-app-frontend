@@ -1,5 +1,6 @@
 import {HotelController} from "./controller/HotelController.js";
-new HotelController();
+let hotelController = new HotelController();
+
 function displayImages(event) {
     const imageDisplay = document.getElementById('imageDisplay');
     // imageDisplay.innerHTML = '';

@@ -195,7 +195,7 @@ export class UserController {
     }
 
     getAllUsers() {
-        this.storedAccessToken = localStorage.getItem('accessToken');
+        this.storedAccessToken = localStorage.getItem('userAdminAccessToken');
 
         $.ajax({
             type: "GET",
@@ -231,7 +231,7 @@ export class UserController {
             userCard.className = "card col-lg-3 col-md-5 col-sm-12 p-4 m-1";
             userCard.id = user.userId;
             userCard.innerHTML = `
-                             <div class="card-body">
+                             <div class="card-body d-flex flex-column">
                                  <h6 class="mb-2">User Id: <span class="guideId" style="color: #0a53be">${user.userId}</span></h6>
                                  <h5 class="card-title">Username : ${user.username}</h5>
                                  <h6 class="card-title">Admin type : ${user.userType}</h6>
@@ -347,7 +347,7 @@ export class UserController {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             },
-            success: (res) => {
+            success: () => {
                 window.location.href = '../Login/index.html';
             },
             error: (error) => {
