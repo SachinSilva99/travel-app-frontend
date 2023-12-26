@@ -361,39 +361,32 @@ export class DashboardController {
     }
 
     setUpMap() {
-        window.initMap = () => {
-            const myLatlng = {lat: 6.5788759736, lng: 79.9665327316};
-            const map = new google.maps.Map(document.getElementById("map"), {
+        const loadMapScenario = () => {
+            const map = new Microsoft.Maps.Map(document.getElementById("map"), {
+                credentials: "As48ZOnLQzhw1DkQtfwoFydwi7jCxxJoKMOfVoLxlDL9IGCVTQv",
+                center: new Microsoft.Maps.Location(6.58274089537376, 79.96377931723782),
                 zoom: 10,
-                center: myLatlng,
             });
-            let infoWindow = new google.maps.InfoWindow({
-                content: "Click the map to get Lat/Lng!",
-                position: myLatlng,
-
-            });
-
-            infoWindow.open(map);
-            map.addListener("click", (mapsMouseEvent) => {
-                infoWindow.close();
-                // Create a new InfoWindow.
-                infoWindow = new google.maps.InfoWindow({
-                    position: mapsMouseEvent.latLng,
-                });
-                const data = mapsMouseEvent.latLng.toJSON();
-                this.lat = data.lat;
-                this.lng = data.lng;
+            Microsoft.Maps.Events.addHandler(map, "click", (e) => {
+                const location = e.location;
+                this.lat = location.latitude;
+                this.lng = location.longitude;
                 this.latEl.val(this.lat);
                 this.lngEl.val(this.lng);
                 this.latElOnChange();
-                infoWindow.setContent(
-                    JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-                );
-                infoWindow.open(map);
+
+                const pushpin = new Microsoft.Maps.Pushpin(location, {
+                    color: 'red',
+                    title: "Latitude: " +
+                      location.latitude +
+                      ", Longitude: " +
+                      location.longitude
+                });
+                map.entities.clear();
+                map.entities.push(pushpin);
             });
-
-        };
-
+        }
+        loadMapScenario();
     }
 
     hotelStayHotelElOnChange(e) {
